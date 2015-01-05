@@ -27,10 +27,10 @@ import ardrone2.controller.JoystickController;
 import ardrone2.controller.KeyboardController;
 
 /**
- * Class ARDrone2Test
+ * Class Test
  * @author Prostov Yury
  */
-public class ARDrone2Test {
+public class Test {
         
     public static JFrame frame = null;
     
