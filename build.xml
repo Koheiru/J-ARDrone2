@@ -10,6 +10,14 @@
 <project name="j-ardrone2" default="default" basedir=".">
     <description>Builds, tests, and runs the project j-ardrone2.</description>
     <import file="nbproject/build-impl.xml"/>
+	
+	<target name="-post-jar">
+		<echo>Copying jinput native dependant libraries</echo>
+		<copy todir="./dist/native">
+            <fileset dir="./jinput/native"/>
+        </copy>
+	</target>
+	
     <!--
 
     There exist several targets which are by default empty and which can be 
