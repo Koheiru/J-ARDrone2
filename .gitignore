@@ -45,6 +45,6 @@ Temporary Items
 # User defined
 /build
 /dist/*
-/jinput-*.dll
-/jinput-*.so
-/jinput-*.jnilib
+/*.dll
+/*.so
+/*.jnilib
