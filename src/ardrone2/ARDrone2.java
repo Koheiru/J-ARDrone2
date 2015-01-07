@@ -218,8 +218,13 @@ public class ARDrone2
     }
 
     @Override
-    public void animateLed(LedAnimation ledAnimation, float animationFrequency, int animationDuration) {
-        m_droneLed.animateLed(ledAnimation, animationFrequency, animationDuration);
+    public void animateLed(int animationId, float frequency, int duration) {
+        m_droneLed.animateLed(animationId, frequency, duration);
+    }
+    
+    @Override
+    public void animateLed(LedAnimation animationId, float frequency, int duration) {
+        m_droneLed.animateLed(animationId, frequency, duration);
     }
     
 }

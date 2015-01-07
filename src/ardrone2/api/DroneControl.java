@@ -34,7 +34,7 @@ public interface DroneControl {
         Flying,
         Hovering,
         Landing,
-        //Emergency,
+        Emergency,
     }
     
     public ControlState controlState();

@@ -52,16 +52,16 @@ public class Test {
         drone.addListener(new ARDrone2.ConnectionListener() {
             @Override
             public void onConnectionStateChanged(DroneConnector.ConnectionState state) {
-                if (state == DroneConnector.ConnectionState.DISCONNECTED) {
+                if (state == DroneConnector.ConnectionState.Disconnected) {
                     System.out.println("Drone connection: DISCONNECTED");
                 }
-                else if (state == DroneConnector.ConnectionState.CONNECTING) {
+                else if (state == DroneConnector.ConnectionState.Connecting) {
                     System.out.println("Drone connection: CONNECTING");
                 }
-                else if (state == DroneConnector.ConnectionState.CONNECTED) {
+                else if (state == DroneConnector.ConnectionState.Connected) {
                     System.out.println("Drone connection: CONNECTED");
                 }
-                else if (state == DroneConnector.ConnectionState.DISCONNECTING) {
+                else if (state == DroneConnector.ConnectionState.Disconnecting) {
                     System.out.println("Drone connection: DISCONNECTING");
                 }
             }
@@ -127,11 +127,11 @@ public class Test {
         }
         
         KeyboardController controller = new KeyboardController(frame, drone);
-        controller.setCommand(KeyEvent.VK_1, new LedCommand(DroneLed.LedAnimation.BLINK_GREEN,     5.0f, 3));
-        controller.setCommand(KeyEvent.VK_2, new LedCommand(DroneLed.LedAnimation.BLINK_RED,       5.0f, 3));
-        controller.setCommand(KeyEvent.VK_3, new LedCommand(DroneLed.LedAnimation.BLINK_ORANGE,    5.0f, 3));
-        controller.setCommand(KeyEvent.VK_4, new LedCommand(DroneLed.LedAnimation.SNAKE_GREEN_RED, 5.0f, 3));
-        controller.setCommand(KeyEvent.VK_0, new LedCommand(DroneLed.LedAnimation.STANDARD,        5.0f, 3));
+        controller.setCommand(KeyEvent.VK_1, new LedCommand(DroneLed.LedAnimation.BlinkGreen,    5.0f, 3));
+        controller.setCommand(KeyEvent.VK_2, new LedCommand(DroneLed.LedAnimation.BlinkRed,      5.0f, 3));
+        controller.setCommand(KeyEvent.VK_3, new LedCommand(DroneLed.LedAnimation.BlinkOrange,   5.0f, 3));
+        controller.setCommand(KeyEvent.VK_4, new LedCommand(DroneLed.LedAnimation.SnakeGreenRed, 5.0f, 3));
+        controller.setCommand(KeyEvent.VK_0, new LedCommand(DroneLed.LedAnimation.Standard,      5.0f, 3));
         controller.start();
     }
     

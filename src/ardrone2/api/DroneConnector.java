@@ -29,10 +29,10 @@ public interface DroneConnector {
     }
     
     public static enum ConnectionState {
-        DISCONNECTED,
-        CONNECTING,
-        CONNECTED,
-        DISCONNECTING,
+        Disconnected,
+        Connecting,
+        Connected,
+        Disconnecting,
     }
     
     public ConnectionState connectionState();

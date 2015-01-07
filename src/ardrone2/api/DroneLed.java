@@ -21,32 +21,35 @@ package ardrone2.api;
  */
 public interface DroneLed {
     public static enum LedAnimation {
-        BLINK_GREEN_RED(0),
-        BLINK_GREEN(1),
-        BLINK_RED(2),
-        BLINK_ORANGE(3),
-        SNAKE_GREEN_RED(4),
-        FIRE(5),
-        STANDARD(6),
-        RED(7),
-        GREEN(8),
-        RED_SNAKE(9),
-        BLANK(10),
-        RIGHT_MISSILE(11),
-        LEFT_MISSILE(12),
-        DOUBLE_MISSILE(13),
-        FRONT_LEFT_GREEN_OTHERS_RED(14),
-        FRONT_RIGHT_GREEN_OTHERS_RED(15),
-        REAR_RIGHT_GREEN_OTHERS_RED(16),
-        REAR_LEFT_GREEN_OTHERS_RED(17),
-        LEFT_GREEN_RIGHT_RED(18),
-        LEFT_RED_RIGHT_GREEN(19),
-        BLINK_STANDARD(20);
+        BlinkGreenRed(0),
+        BlinkGreen(1),
+        BlinkRed(2),
+        BlinkOrange(3),
+        SnakeGreenRed(4),
+        Fire(5),
+        Standard(6),
+        Red(7),
+        Grean(8),
+        RedSnake(9),
+        Blank(10),
+        RightMissile(11),
+        LeftMissile(12),
+        DoubleMissile(13),
+        FrontLeftGreenOthersRed(14),
+        FrontRightGreenOthresRed(15),
+        FearRightGreenOthersSRed(16),
+        FearLeftGreenOthersRed(17),
+        LeftGreenRightRed(18),
+        LeftRedRightGreen(19),
+        BlinkStandard(20);
+        
         public int getValue() { return m_id; }
         private LedAnimation(int id) { m_id = id; }
         private int m_id;
     }
     
-    public void animateLed(LedAnimation ledAnimation, float animationFrequency, int animationDuration);
+    public void animateLed(int animationId, float frequency, int duration);
+    
+    public void animateLed(LedAnimation animationId, float frequency, int duration);
     
 }

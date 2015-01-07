@@ -28,7 +28,7 @@ public class DroneConnectorImpl
     extends DroneModuleExt<DroneConnector.ConnectionListener>
     implements DroneConnector {
 
-    private ConnectionState m_state = ConnectionState.DISCONNECTED;
+    private ConnectionState m_state = ConnectionState.Disconnected;
     private final Object m_sync = new Object();
     
     public DroneConnectorImpl() {
@@ -60,12 +60,12 @@ public class DroneConnectorImpl
 
     @Override
     public boolean waitForConnected(long msec) throws InterruptedException {
-        return waitForState(ConnectionState.CONNECTED, msec);
+        return waitForState(ConnectionState.Connected, msec);
     }
 
     @Override
     public boolean waitForDisconnected(long msec) throws InterruptedException {
-        return waitForState(ConnectionState.DISCONNECTED, msec);
+        return waitForState(ConnectionState.Disconnected, msec);
     }
 
     @Override
@@ -94,16 +94,16 @@ public class DroneConnectorImpl
     
     private ConnectionState convert(Engine.State engineState) {
         if (engineState == Engine.State.Disconnected) {
-            return ConnectionState.DISCONNECTED;
+            return ConnectionState.Disconnected;
         }
         else if (engineState == Engine.State.Connecting) {
-            return ConnectionState.CONNECTING;
+            return ConnectionState.Connecting;
         }
         else if (engineState == Engine.State.Connected) {
-            return ConnectionState.CONNECTED;
+            return ConnectionState.Connected;
         }
         else {
-            return ConnectionState.DISCONNECTING;
+            return ConnectionState.Disconnecting;
         }
     }
     

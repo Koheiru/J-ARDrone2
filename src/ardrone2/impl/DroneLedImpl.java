@@ -30,8 +30,13 @@ public class DroneLedImpl
     }
     
     @Override
-    public void animateLed(LedAnimation ledAnimation, float animationFrequency, int animationDuration) {
-        engine().send(new LedCommand(ledAnimation.getValue(), animationFrequency, animationDuration));
+    public void animateLed(int animationId, float frequency, int duration) {
+        engine().send(new LedCommand(animationId, frequency, duration));
+    }
+    
+    @Override
+    public void animateLed(LedAnimation animationId, float frequency, int duration) {
+        animateLed(animationId.getValue(), frequency, duration);
     }
 
 }
