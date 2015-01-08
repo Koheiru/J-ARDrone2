@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ardrone2.api;
+package ardrone2;
 
 /**
  * Interface DroneControl
@@ -25,16 +25,6 @@ public interface DroneControl {
         public void onControlStateChanged(ControlState state);
         public void onDirectionChanged(float altitude, float pitch, float roll, float yaw);
         public void onVelocityChanged(float xVelocity, float yVelocity, float zVelocity);
-    }
-    
-    public static enum ControlState {
-        Unknown,
-        Landed,
-        TakingOff,
-        Flying,
-        Hovering,
-        Landing,
-        Emergency,
     }
     
     public ControlState controlState();

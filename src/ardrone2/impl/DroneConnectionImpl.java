@@ -15,24 +15,25 @@
  */
 package ardrone2.impl;
 
-import ardrone2.api.DroneConnector;
-import ardrone2.api.DroneCommand;
+import ardrone2.ConnectionState;
+import ardrone2.DroneConnection;
+import ardrone2.DroneCommand;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
- * Class DroneConnectorImpl
+ * Class DroneConnectionImpl
  * @author Prostov Yury
  */
-public class DroneConnectorImpl
-    extends DroneModuleExt<DroneConnector.ConnectionListener>
-    implements DroneConnector {
+public class DroneConnectionImpl
+    extends DroneModuleExt<DroneConnection.ConnectionListener>
+    implements DroneConnection {
 
     private ConnectionState m_state = ConnectionState.Disconnected;
     private final Object m_sync = new Object();
     
-    public DroneConnectorImpl() {
-        super(DroneConnector.ConnectionListener.class);
+    public DroneConnectionImpl() {
+        super(DroneConnection.ConnectionListener.class);
     }
         
     @Override
@@ -86,7 +87,7 @@ public class DroneConnectorImpl
         }
         
         Object[] lll = listeners();
-        DroneConnector.ConnectionListener[] listeners = (DroneConnector.ConnectionListener[]) lll;
+        DroneConnection.ConnectionListener[] listeners = (DroneConnection.ConnectionListener[]) lll;
         for (ConnectionListener listener: listeners) {
             listener.onConnectionStateChanged(newState);
         }

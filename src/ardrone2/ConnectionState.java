@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2015 Prostov Yury.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,23 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ardrone2.api;
 
-import java.util.List;
+package ardrone2;
 
 /**
- * Interface DroneInterception
+ * Class ConnectionState
  * @author Prostov Yury
  */
-public interface DroneInterception {
-    
-    public static interface Interceptor {
-        public void handleCommand(DroneCommand input, List<DroneCommand> output);
-        public void handleMessage(DroneMessage input, List<DroneMessage> output);
-    }
-    
-    public void addInterceptor(Interceptor interceptor);
-    
-    public void removeInterceptor(Interceptor interceptor);
-    
+public enum ConnectionState {
+    Disconnected, Connecting, Connected, Disconnecting
+
 }

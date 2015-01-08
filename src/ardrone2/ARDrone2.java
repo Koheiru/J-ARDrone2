@@ -21,13 +21,7 @@ import ardrone2.impl.DroneModule;
 import ardrone2.impl.DroneStateImpl;
 import ardrone2.impl.EngineImpl;
 import ardrone2.impl.DroneLedImpl;
-import ardrone2.impl.DroneConnectorImpl;
-import ardrone2.api.DroneConnector;
-import ardrone2.api.DroneLed;
-import ardrone2.api.Drone;
-import ardrone2.api.DroneCommand;
-import ardrone2.api.DroneControl;
-import ardrone2.api.DroneState;
+import ardrone2.impl.DroneConnectionImpl;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -38,19 +32,19 @@ import java.util.List;
  * @author Prostov Yury
  */
 public class ARDrone2
-    implements Drone, DroneConnector, DroneState, DroneControl, DroneLed {
+    implements Drone, DroneConnection, DroneState, DroneControl, DroneLed {
 
     private EngineImpl m_engine = null;
     private List<Engine.Handler> m_handlers = new ArrayList<>();
     private List<DroneModule> m_modules = new ArrayList<>();
     
-    private DroneConnectorImpl m_droneConnector = null;
+    private DroneConnectionImpl m_droneConnector = null;
     private DroneStateImpl     m_droneState     = null;
     private DroneControlImpl   m_droneControl   = null;
     private DroneLedImpl       m_droneLed       = null;
     
     public ARDrone2() {
-        m_droneConnector = new DroneConnectorImpl();
+        m_droneConnector = new DroneConnectionImpl();
         m_modules.add(m_droneConnector);
         m_handlers.add(m_droneConnector);
         

@@ -13,41 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ardrone2.commands;
-
-import ardrone2.DroneCommand;
+package ardrone2;
 
 /**
- * Class ConfigCommand
+ * Interface DroneState
  * @author Prostov Yury
  */
-public class ConfigCommand implements DroneCommand {
-    
-    private static final String NAME = "AT*CONFIG";
-    private String m_param;
-    private String m_value;
-    
-    public ConfigCommand(String param, String value) {
-        m_param = param;
-        m_value = value;
+public interface DroneState {
+    public static interface StateListener extends Drone.Listener {
+        public void onBatteryLevelChanged(int batteryLevel);
     }
     
-    @Override
-    public String name() {
-        return NAME;
-    }
-
-    @Override
-    public Object[] parameters() {
-        return new Object[] { m_param, m_value };
-    }
+    public int batteryLevel();
     
-    public String param() {
-        return m_param;
-    }
+    public boolean isBatteryTooLow();
     
-    public String value() {
-        return m_value;
-    }
+    public boolean isBatteryTooHigh();
     
 }

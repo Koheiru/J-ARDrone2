@@ -15,8 +15,9 @@
  */
 package ardrone2.impl;
 
-import ardrone2.api.DroneControl;
-import ardrone2.api.DroneMessage;
+import ardrone2.ControlState;
+import ardrone2.DroneControl;
+import ardrone2.DroneMessage;
 import ardrone2.commands.ConfigCommand;
 import ardrone2.commands.EmergencyCommand;
 import ardrone2.commands.FlatTrimCommand;

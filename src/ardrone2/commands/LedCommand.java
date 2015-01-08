@@ -15,8 +15,9 @@
  */
 package ardrone2.commands;
 
-import ardrone2.api.DroneCommand;
-import ardrone2.api.DroneLed;
+import ardrone2.DroneCommand;
+import ardrone2.DroneLed;
+import ardrone2.LedAnimation;
 
 /**
  * Class LedCommand
@@ -29,7 +30,7 @@ public class LedCommand implements DroneCommand {
     private float m_animationFrequency = 0.0f;
     private int   m_animationDuration = 0;
     
-    public LedCommand(DroneLed.LedAnimation animation, float frequency, int duration) {
+    public LedCommand(LedAnimation animation, float frequency, int duration) {
         this(animation.getValue(), frequency, duration);
     }
     

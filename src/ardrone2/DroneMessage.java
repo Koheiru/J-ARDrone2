@@ -13,16 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ardrone2.api;
+package ardrone2;
 
 /**
- * Interface DroneCommand
+ * Interface DroneMessage
  * @author Prostov Yury
  */
-public interface DroneCommand {
-    
-    public String name();
-    
-    public Object[] parameters();
-    
+public interface DroneMessage {
 }

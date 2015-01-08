@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2015 Prostov Yury.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,37 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ardrone2.commands;
 
-import ardrone2.DroneCommand;
+package ardrone2;
 
 /**
- * Class CalibrationCommand
+ * Class ControlState
  * @author Prostov Yury
  */
-public class CalibrationCommand implements DroneCommand {
-    
-    private static final String NAME = "AT*CALIB";
-    private int m_deviceId = 0;
-    
-    public CalibrationCommand() {
-    }
-    
-    public CalibrationCommand(int deviceId) {
-        m_deviceId = deviceId;
-    }
-    
-    @Override
-    public String name() {
-        return NAME;
-    }
+public enum ControlState {
+    Unknown, Landed, TakingOff, Flying, Hovering, Landing, Emergency
 
-    @Override
-    public Object[] parameters() {
-        return new Object[] { m_deviceId };
-    }
-    
-    public int deviceId() {
-        return m_deviceId;
-    }
 }

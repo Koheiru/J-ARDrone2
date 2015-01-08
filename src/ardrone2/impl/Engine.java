@@ -17,8 +17,8 @@ package ardrone2.impl;
 
 import java.net.InetAddress;
 import java.util.List;
-import ardrone2.api.DroneCommand;
-import ardrone2.api.DroneMessage;
+import ardrone2.DroneCommand;
+import ardrone2.DroneMessage;
 
 /**
  * Class Engine

@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.JFrame;
 import ardrone2.ARDrone2;
-import ardrone2.api.DroneCommand;
+import ardrone2.DroneCommand;
 import ardrone2.commands.EmergencyCommand;
 import ardrone2.commands.FlatTrimCommand;
 import ardrone2.commands.HoverCommand;

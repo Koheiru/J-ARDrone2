@@ -13,21 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ardrone2.api;
+package ardrone2;
 
 /**
- * Interface DroneState
+ * Interface Drone
  * @author Prostov Yury
  */
-public interface DroneState {
-    public static interface StateListener extends Drone.Listener {
-        public void onBatteryLevelChanged(int batteryLevel);
+public interface Drone {
+    
+    public static interface Listener {
     }
     
-    public int batteryLevel();
+    public void addListener(Listener listener);
     
-    public boolean isBatteryTooLow();
-    
-    public boolean isBatteryTooHigh();
+    public void removeListener(Listener listener);
     
 }

@@ -13,26 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ardrone2.api;
+package ardrone2;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
- * Interface DroneConnector
+ * Interface DroneConnection
  * @author Prostov Yury
  */
-public interface DroneConnector {
+public interface DroneConnection {
     
     public static interface ConnectionListener extends Drone.Listener {
         public void onConnectionStateChanged(ConnectionState state);
-    }
-    
-    public static enum ConnectionState {
-        Disconnected,
-        Connecting,
-        Connected,
-        Disconnecting,
     }
     
     public ConnectionState connectionState();

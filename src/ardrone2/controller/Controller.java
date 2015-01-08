@@ -17,7 +17,8 @@ package ardrone2.controller;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import ardrone2.ARDrone2;
-import ardrone2.api.DroneCommand;
+import ardrone2.ControlState;
+import ardrone2.DroneCommand;
 
 /**
  * Class Controller
@@ -60,8 +61,8 @@ public abstract class Controller {
         }
         
         private void handleAxis(ARDrone2 drone) {
-            if (drone.controlState() != ARDrone2.ControlState.Flying &&
-                drone.controlState() != ARDrone2.ControlState.Hovering) {
+            if (drone.controlState() != ControlState.Flying &&
+                drone.controlState() != ControlState.Hovering) {
                 return;
             }
             

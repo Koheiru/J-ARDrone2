@@ -18,7 +18,7 @@ package ardrone2.impl;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
-import ardrone2.api.DroneCommand;
+import ardrone2.DroneCommand;
 import ardrone2.commands.WatchDogCommand;
 
 /**

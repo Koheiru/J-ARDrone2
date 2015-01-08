@@ -16,7 +16,7 @@
 package ardrone2.controller;
 
 import ardrone2.ARDrone2;
-import ardrone2.api.DroneCommand;
+import ardrone2.DroneCommand;
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;

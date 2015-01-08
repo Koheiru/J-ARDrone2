@@ -15,7 +15,7 @@
  */
 package ardrone2.messages;
 
-import ardrone2.api.DroneMessage;
+import ardrone2.DroneMessage;
 import ardrone2.math.Point;
 import ardrone2.math.Dimension;
 import ardrone2.math.Vector3D;

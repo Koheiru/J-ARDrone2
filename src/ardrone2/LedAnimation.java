@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2015 Prostov Yury.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,37 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ardrone2.commands;
 
-import ardrone2.DroneCommand;
+package ardrone2;
 
 /**
- * Class CalibrationCommand
+ * Class LedAnimation
  * @author Prostov Yury
  */
-public class CalibrationCommand implements DroneCommand {
-    
-    private static final String NAME = "AT*CALIB";
-    private int m_deviceId = 0;
-    
-    public CalibrationCommand() {
-    }
-    
-    public CalibrationCommand(int deviceId) {
-        m_deviceId = deviceId;
-    }
-    
-    @Override
-    public String name() {
-        return NAME;
+public enum LedAnimation {
+    BlinkGreenRed(0), BlinkGreen(1), BlinkRed(2), BlinkOrange(3), SnakeGreenRed(4), Fire(5), Standard(6), Red(7), Grean(8), RedSnake(9), Blank(10), RightMissile(11), LeftMissile(12), DoubleMissile(13), FrontLeftGreenOthersRed(14), FrontRightGreenOthresRed(15), FearRightGreenOthersSRed(16), FearLeftGreenOthersRed(17), LeftGreenRightRed(18), LeftRedRightGreen(19), BlinkStandard(20);
+
+    public int getValue() {
+        return m_id;
     }
 
-    @Override
-    public Object[] parameters() {
-        return new Object[] { m_deviceId };
+    private LedAnimation(int id) {
+        m_id = id;
     }
-    
-    public int deviceId() {
-        return m_deviceId;
-    }
+    private int m_id;
+
 }

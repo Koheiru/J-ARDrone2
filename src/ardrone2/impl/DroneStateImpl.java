@@ -15,8 +15,8 @@
  */
 package ardrone2.impl;
 
-import ardrone2.api.DroneMessage;
-import ardrone2.api.DroneState;
+import ardrone2.DroneMessage;
+import ardrone2.DroneState;
 import ardrone2.messages.DemoMessage;
 import ardrone2.messages.StateMessage;
 

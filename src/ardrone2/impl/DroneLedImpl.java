@@ -15,7 +15,8 @@
  */
 package ardrone2.impl;
 
-import ardrone2.api.DroneLed;
+import ardrone2.DroneLed;
+import ardrone2.LedAnimation;
 import ardrone2.commands.LedCommand;
 
 /**

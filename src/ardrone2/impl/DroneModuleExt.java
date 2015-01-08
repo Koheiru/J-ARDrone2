@@ -18,7 +18,7 @@ package ardrone2.impl;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
-import ardrone2.api.Drone;
+import ardrone2.Drone;
 
 /**
  * Class DroneModuleExt<T>

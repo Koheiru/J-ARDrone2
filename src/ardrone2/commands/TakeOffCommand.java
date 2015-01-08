@@ -15,7 +15,7 @@
  */
 package ardrone2.commands;
 
-import ardrone2.api.DroneCommand;
+import ardrone2.DroneCommand;
 
 /**
  * Class TakeOffCommand

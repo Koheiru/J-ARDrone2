@@ -27,7 +27,7 @@ import io.netty.handler.codec.MessageToMessageDecoder;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
-import ardrone2.api.DroneMessage;
+import ardrone2.DroneMessage;
 import ardrone2.math.Conversion;
 import ardrone2.math.Dimension;
 import ardrone2.math.Matrix3x3;

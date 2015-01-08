@@ -15,7 +15,7 @@
  */
 package ardrone2.impl;
 
-import ardrone2.api.DroneCommand;
+import ardrone2.DroneCommand;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelDuplexHandler;
@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.net.InetAddress;
 import java.util.concurrent.TimeUnit;
-import ardrone2.api.DroneMessage;
+import ardrone2.DroneMessage;
 import ardrone2.commands.WatchDogCommand;
 
 /**

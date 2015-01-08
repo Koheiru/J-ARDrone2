@@ -13,11 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ardrone2.api;
+package ardrone2;
+
+import java.util.List;
 
 /**
- * Interface DroneMessage
+ * Interface DroneInterception
  * @author Prostov Yury
  */
-public interface DroneMessage {
+public interface DroneInterception {
+    
+    public static interface Interceptor {
+        public void handleCommand(DroneCommand input, List<DroneCommand> output);
+        public void handleMessage(DroneMessage input, List<DroneMessage> output);
+    }
+    
+    public void addInterceptor(Interceptor interceptor);
+    
+    public void removeInterceptor(Interceptor interceptor);
+    
 }
