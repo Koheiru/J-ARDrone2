@@ -202,13 +202,13 @@ public class ARDrone2
     }
 
     @Override
-    public void move(float roll, float pitch, float yaw, float gaz) {
-        m_droneControl.move(roll, pitch, yaw, gaz);
+    public void move(float pitch, float roll, float yaw, float gaz) {
+        m_droneControl.move(pitch, roll, yaw, gaz);
     }
 
     @Override
-    public void move(float roll, float pitch, float yaw, float gaz, boolean isCombinedYaw) {
-        m_droneControl.move(roll, pitch, yaw, gaz, isCombinedYaw);
+    public void move(float pitch, float roll, float yaw, float gaz, boolean isCombinedYaw) {
+        m_droneControl.move(pitch, roll, yaw, gaz, isCombinedYaw);
     }
 
     @Override

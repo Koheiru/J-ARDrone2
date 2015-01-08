@@ -53,8 +53,8 @@ public interface DroneControl {
     
     public void emergency();
     
-    public void move(float roll, float pitch, float yaw, float gaz);
+    public void move(float pitch, float roll, float yaw, float gaz);
     
-    public void move(float roll, float pitch, float yaw, float gaz, boolean isCombinedYaw);
+    public void move(float pitch, float roll, float yaw, float gaz, boolean isCombinedYaw);
     
 }

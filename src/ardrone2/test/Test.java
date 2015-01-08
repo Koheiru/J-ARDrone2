@@ -15,17 +15,13 @@
  */
 package ardrone2.test;
 
-import ardrone2.ARDrone2;
-import ardrone2.ConnectionState;
-import ardrone2.ControlState;
-import ardrone2.LedAnimation;
 import java.awt.event.KeyEvent;
 import java.net.Inet4Address;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
-import ardrone2.commands.LedCommand;
-import ardrone2.controller.JoystickController;
-import ardrone2.controller.KeyboardController;
+import ardrone2.*;
+import ardrone2.commands.*;
+import ardrone2.controller.*;
 
 /**
  * Class Test

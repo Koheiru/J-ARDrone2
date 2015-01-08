@@ -114,12 +114,12 @@ public class DroneControlImpl
     }
 
     @Override
-    public void move(float roll, float pitch, float yaw, float gaz) {
+    public void move(float pitch, float roll, float yaw, float gaz) {
         engine().send(new MoveCommand(pitch, roll, yaw, gaz));
     }
 
     @Override
-    public void move(float roll, float pitch, float yaw, float gaz, boolean isCombinedYaw) {
+    public void move(float pitch, float roll, float yaw, float gaz, boolean isCombinedYaw) {
         engine().send(new MoveCommand(pitch, roll, yaw, gaz, isCombinedYaw));
     }
     
