@@ -127,23 +127,24 @@ public class KeyboardController extends Controller {
     }
     
     @Override
-    public String name() {
-        return "Keyboard";
-    }
-    
-    @Override
-    protected boolean initialize() {
+    public boolean start() {
         synchronized (m_sync) {
             m_axis = new ControllerAxis();
             m_commands.clear();
         }
         m_window.addKeyListener(m_listener);
-        return true;
+        return super.start();
     }
     
     @Override
-    protected void deinitialize() {
+    public void stop() throws Exception {
         m_window.removeKeyListener(m_listener);
+        super.stop();
+    }
+    
+    @Override
+    public String name() {
+        return "Keyboard";
     }
     
     @Override

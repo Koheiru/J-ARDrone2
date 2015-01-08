@@ -116,9 +116,6 @@ public abstract class Controller {
     }
     
     public boolean start() {
-        if (!initialize()) {
-            return false;
-        }
         m_isDone.set(false);
         m_thread.start();
         return true;
@@ -130,10 +127,6 @@ public abstract class Controller {
     }
     
     public abstract String name();
-    
-    protected abstract boolean initialize();
-    
-    protected abstract void deinitialize();
     
     protected abstract ControllerAxis currentAxis();
     

@@ -43,15 +43,6 @@ public class JoystickController extends ardrone2.controller.Controller {
     public String name() {
         return "Joystick";
     }
-    
-    @Override
-    protected boolean initialize() {
-        return true;
-    }
-    
-    @Override
-    protected void deinitialize() {
-    }
 
     @Override
     protected ControllerAxis currentAxis() {
