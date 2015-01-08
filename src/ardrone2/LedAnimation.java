@@ -21,15 +21,35 @@ package ardrone2;
  * @author Prostov Yury
  */
 public enum LedAnimation {
-    BlinkGreenRed(0), BlinkGreen(1), BlinkRed(2), BlinkOrange(3), SnakeGreenRed(4), Fire(5), Standard(6), Red(7), Grean(8), RedSnake(9), Blank(10), RightMissile(11), LeftMissile(12), DoubleMissile(13), FrontLeftGreenOthersRed(14), FrontRightGreenOthresRed(15), FearRightGreenOthersSRed(16), FearLeftGreenOthersRed(17), LeftGreenRightRed(18), LeftRedRightGreen(19), BlinkStandard(20);
+    BlinkGreenRed(0),
+    BlinkGreen(1),
+    BlinkRed(2),
+    BlinkOrange(3),
+    SnakeGreenRed(4),
+    Fire(5),
+    Standard(6),
+    Red(7),
+    Grean(8),
+    RedSnake(9),
+    Blank(10),
+    RightMissile(11),
+    LeftMissile(12),
+    DoubleMissile(13),
+    FrontLeftGreenOthersRed(14),
+    FrontRightGreenOthresRed(15),
+    FearRightGreenOthersSRed(16),
+    FearLeftGreenOthersRed(17),
+    LeftGreenRightRed(18),
+    LeftRedRightGreen(19),
+    BlinkStandard(20);
 
-    public int getValue() {
-        return m_id;
-    }
-
+    private int m_id;
+    
     private LedAnimation(int id) {
         m_id = id;
     }
-    private int m_id;
-
+    
+    public int getValue() {
+        return m_id;
+    }
 }

@@ -21,6 +21,11 @@ package ardrone2;
  * @author Prostov Yury
  */
 public enum ControlState {
-    Unknown, Landed, TakingOff, Flying, Hovering, Landing, Emergency
-
+    Unknown,
+    Landed,
+    TakingOff,
+    Flying,
+    Hovering,
+    Landing,
+    Emergency,
 }

@@ -65,7 +65,8 @@ public class ARDrone2
     }
     
     @Override
-    public void finalize() {
+    protected void finalize() throws Throwable {
+        super.finalize();
         m_engine.uninitialize();
         m_handlers.clear();
         m_modules.clear();

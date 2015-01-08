@@ -21,6 +21,8 @@ package ardrone2;
  * @author Prostov Yury
  */
 public enum ConnectionState {
-    Disconnected, Connecting, Connected, Disconnecting
-
+    Disconnected,
+    Connecting,
+    Connected,
+    Disconnecting,
 }
