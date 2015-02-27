@@ -22,10 +22,10 @@ import ardrone2.DroneCommand;
 import ardrone2.commands.WatchDogCommand;
 
 /**
- * Class EngineEncoder
+ * Class CommandEncoder
  * @author Prostov Yury
  */
-public class EngineEncoder extends MessageToByteEncoder<DroneCommand> {
+public class CommandEncoder extends MessageToByteEncoder<DroneCommand> {
 
     private int m_sequenceId = 0;
     

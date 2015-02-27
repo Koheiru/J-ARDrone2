@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ardrone2.controller;
+package ardrone2.controllers;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import ardrone2.ARDrone2;
@@ -116,12 +116,14 @@ public abstract class Controller {
         }
     }
     
+    //! TODO: call it in constructor and remove from api...
     public boolean start() {
         m_isDone.set(false);
         m_thread.start();
         return true;
     }
     
+    //! TODO: call it in destructor and remove from api...
     public void stop() throws Exception {
         m_isDone.set(true);
         m_thread.join();

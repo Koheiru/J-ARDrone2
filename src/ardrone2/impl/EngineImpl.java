@@ -37,6 +37,16 @@ import java.net.InetAddress;
 import java.util.concurrent.TimeUnit;
 import ardrone2.DroneMessage;
 import ardrone2.commands.WatchDogCommand;
+import ardrone2.video.VideoFrame;
+import com.twilight.h264.util.PoveWrapper;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.socket.DatagramPacket;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.MessageToMessageDecoder;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.ByteBuffer;
 
 /**
  * Class EngineImpl
@@ -136,12 +146,12 @@ public class EngineImpl implements Engine {
     }
     
     public static class ReceiversWrapper extends ChannelInboundHandlerAdapter {
-        private List<Engine.Receiver> m_receivers = new ArrayList<>();
+        private List<Engine.MessageReceiver> m_receivers = new ArrayList<>();
         
         public ReceiversWrapper(List<Engine.Handler> handlers) {
             for (Engine.Handler handler : handlers) {
-                if (handler instanceof Engine.Receiver) {
-                    m_receivers.add((Engine.Receiver)handler);
+                if (handler instanceof Engine.MessageReceiver) {
+                    m_receivers.add((Engine.MessageReceiver)handler);
                 }
             }
         }
@@ -152,11 +162,41 @@ public class EngineImpl implements Engine {
             
             if (object instanceof DroneMessage) {
                 DroneMessage message = (DroneMessage)object;
-                for (Engine.Receiver receiver : m_receivers) {
+                for (Engine.MessageReceiver receiver : m_receivers) {
                     receiver.onMessageReceived(message);
                 }
             }
             context.fireChannelRead(object);
+        }
+    }
+    
+    public class VideoWrapper extends ChannelInboundHandlerAdapter {
+        private List<Engine.VideoReceiver> m_receivers = new ArrayList<>();
+        
+        public VideoWrapper(List<Engine.Handler> handlers) {
+            for (Engine.Handler handler : handlers) {
+                if (handler instanceof Engine.VideoReceiver) {
+                    m_receivers.add((Engine.VideoReceiver)handler);
+                }
+            }
+        }
+        
+        @Override
+        public void channelActive(ChannelHandlerContext context) throws Exception {
+            byte[] handshake = {0x01, 0x00, 0x00, 0x00};
+            EngineImpl.this.m_msgChannel.writeAndFlush(handshake);
+            super.channelActive(context);
+        }
+        
+        @Override
+        public final void channelRead(ChannelHandlerContext context, Object object) throws Exception {
+            if (object instanceof VideoFrame) {
+                VideoFrame videoFrame = (VideoFrame)object;
+                for (Engine.VideoReceiver receiver : m_receivers) {
+                    receiver.onVideoReceived(videoFrame);
+                }
+            }
+            super.channelRead(context, object);
         }
     }
     
@@ -165,10 +205,12 @@ public class EngineImpl implements Engine {
     private EventLoopGroup m_eventLoop = new NioEventLoopGroup();
     private Channel m_cmdChannel = null;
     private Channel m_msgChannel = null;
+    private Channel m_videoChannel = null;
     
     private InetAddress m_address = null;
     private static final int COMMANDS_PORT = 5556;
     private static final int MESSAGES_PORT = 5554;
+    private static final int VIDEO_PORT    = 5555;
     
     private final Object m_sync = new Object();
     private State m_state = State.Disconnected;
@@ -221,7 +263,7 @@ public class EngineImpl implements Engine {
                             @Override
                             protected void initChannel(DatagramChannel channel) throws Exception {
                                 channel.pipeline().addLast("encoder_base", new ByteArrayEncoder());
-                                channel.pipeline().addLast("encoder_cmd", new EngineEncoder());
+                                channel.pipeline().addLast("encoder_cmd", new CommandEncoder());
                                 channel.pipeline().addLast("interceptors", new InterceptorsWrapper(m_handlers));
                                 channel.pipeline().addLast("engine", new CommandChannelHandler());
                             }
@@ -236,7 +278,7 @@ public class EngineImpl implements Engine {
                             @Override
                             protected void initChannel(DatagramChannel channel) throws Exception {
                                 channel.pipeline().addLast("encoder_base", new ByteArrayEncoder());
-                                channel.pipeline().addLast("decoder_msg", new EngineDecoder());
+                                channel.pipeline().addLast("decoder_msg", new MessageDecoder());
                                 channel.pipeline().addLast("interceptors", new InterceptorsWrapper(m_handlers));
                                 channel.pipeline().addLast("receivers", new ReceiversWrapper(m_handlers));
                                 channel.pipeline().addLast("engine", new MessageChannelHandler());
@@ -244,6 +286,21 @@ public class EngineImpl implements Engine {
                         });
             ChannelFuture msgFuture = msgBootstrap.connect(m_address, MESSAGES_PORT);
             m_msgChannel = msgFuture.channel();
+            
+            Bootstrap videoBootstrap = new Bootstrap();
+            videoBootstrap.group(m_eventLoop)
+                        .channel(NioSocketChannel.class)
+                        .handler(new ChannelInitializer<SocketChannel>() {
+                            @Override
+                            protected void initChannel(SocketChannel channel) throws Exception {
+                                channel.pipeline().addLast("encoder_base", new ByteArrayEncoder());
+                                channel.pipeline().addLast("video_aggregator", new VideoAggregator());
+                                channel.pipeline().addLast("video_decoder", new VideoDecoder());
+                                channel.pipeline().addLast("video_handler", new VideoWrapper(m_handlers));
+                            }
+                        });
+            ChannelFuture videoFuture = videoBootstrap.connect(m_address, VIDEO_PORT);
+            m_videoChannel = videoFuture.channel();
         }
         
         return true;
@@ -258,6 +315,7 @@ public class EngineImpl implements Engine {
             
             m_cmdChannel.close();
             m_msgChannel.close();
+            m_videoChannel.close();
             updateState(State.Disconnected);
         }
     }

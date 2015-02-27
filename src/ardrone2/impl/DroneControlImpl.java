@@ -33,7 +33,7 @@ import ardrone2.commands.TakeOffCommand;
  */
 public class DroneControlImpl
     extends DroneModuleExt<DroneControl.ControlListener>
-    implements DroneControl, Engine.Receiver {
+    implements DroneControl, Engine.MessageReceiver {
     
     private ControlState m_state = ControlState.Unknown;
     private float m_altitude = 0.0f;

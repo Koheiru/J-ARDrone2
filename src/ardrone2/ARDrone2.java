@@ -22,6 +22,8 @@ import ardrone2.impl.DroneStateImpl;
 import ardrone2.impl.EngineImpl;
 import ardrone2.impl.DroneLedImpl;
 import ardrone2.impl.DroneConnectionImpl;
+import ardrone2.impl.DroneVisionImpl;
+import ardrone2.video.VideoFrame;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -32,7 +34,7 @@ import java.util.List;
  * @author Prostov Yury
  */
 public class ARDrone2
-    implements Drone, DroneConnection, DroneState, DroneControl, DroneLed {
+    implements Drone, DroneConnection, DroneState, DroneControl, DroneLed, DroneVision {
 
     private EngineImpl m_engine = null;
     private List<Engine.Handler> m_handlers = new ArrayList<>();
@@ -42,6 +44,7 @@ public class ARDrone2
     private DroneStateImpl     m_droneState     = null;
     private DroneControlImpl   m_droneControl   = null;
     private DroneLedImpl       m_droneLed       = null;
+    private DroneVisionImpl    m_droneVision    = null;
     
     public ARDrone2() {
         m_droneConnector = new DroneConnectionImpl();
@@ -59,6 +62,10 @@ public class ARDrone2
         m_droneLed = new DroneLedImpl();
         m_modules.add(m_droneLed);
         m_handlers.add(m_droneLed);
+        
+        m_droneVision = new DroneVisionImpl();
+        m_modules.add(m_droneVision);
+        m_handlers.add(m_droneVision);
         
         m_engine = new EngineImpl();
         m_engine.initialize(m_handlers);
@@ -222,4 +229,8 @@ public class ARDrone2
         m_droneLed.animateLed(animationId, frequency, duration);
     }
     
+    @Override
+    public VideoFrame videoFrame() {
+        return m_droneVision.videoFrame();
+    }
 }

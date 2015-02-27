@@ -19,6 +19,7 @@ import java.net.InetAddress;
 import java.util.List;
 import ardrone2.DroneCommand;
 import ardrone2.DroneMessage;
+import ardrone2.video.VideoFrame;
 
 /**
  * Class Engine
@@ -44,8 +45,12 @@ public interface Engine {
         public DroneMessage handleMessage(DroneMessage message);
     }
     
-    public static interface Receiver extends Handler {
+    public static interface MessageReceiver extends Handler {
         public void onMessageReceived(DroneMessage message);
+    }
+    
+    public static interface VideoReceiver extends Handler {
+        public void onVideoReceived(VideoFrame videoFrame);
     }
     
     public void initialize(List<Handler> handlers);

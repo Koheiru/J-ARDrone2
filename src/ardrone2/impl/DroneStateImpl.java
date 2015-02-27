@@ -26,7 +26,7 @@ import ardrone2.messages.StateMessage;
  */
 public class DroneStateImpl 
     extends DroneModuleExt<DroneState.StateListener>
-    implements DroneState, Engine.Receiver {
+    implements DroneState, Engine.MessageReceiver {
     
     private int m_battteryLevel = 0;
     private boolean m_batteryTooLow = false;

@@ -15,36 +15,41 @@
  */
 package ardrone2.test;
 
+import ardrone2.controllers.KeyboardController;
+import ardrone2.controllers.JoystickController;
 import java.awt.event.KeyEvent;
 import java.net.Inet4Address;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 import ardrone2.*;
 import ardrone2.commands.*;
-import ardrone2.controller.*;
+import ardrone2.video.VideoFrame;
+import ardrone2.view.DroneView;
+import java.awt.BorderLayout;
 
 /**
  * Class Test
  * @author Prostov Yury
  */
 public class Test {
-        
+    
     public static JFrame frame = null;
     
     public static void main(String [] args) throws Exception
     {
-        frame = new JFrame("TEST");
+        frame = new JFrame("ARDrone 2");
         frame.setVisible(true);
         frame.setSize(400, 300);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         
-        //test_ardrone2();
-        test_controllers();
+        test_ardrone2();
+        //test_controllers();
     }
     
     private static void test_ardrone2() throws Exception {
         
         ARDrone2 drone = new ARDrone2();
+        frame.add(new DroneView(drone), BorderLayout.CENTER);
         
         drone.addListener(new ARDrone2.ConnectionListener() {
             @Override
@@ -117,7 +122,7 @@ public class Test {
             }
         });
         
-        drone.connect(Inet4Address.getByName("192.168.1.1"));
+        drone.connect(Inet4Address.getByName("172.16.1.1"));
         if (!drone.waitForConnected(3000)) {
             System.err.println("CONNECTION FAILED!");
             System.exit(1);

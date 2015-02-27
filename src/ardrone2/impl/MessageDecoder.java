@@ -35,10 +35,10 @@ import ardrone2.math.Point;
 import ardrone2.math.Vector3D;
 
 /**
- * Class EngineDecoder
+ * Class MessageDecoder
  * @author Prostov Yury
  */
-public class EngineDecoder extends MessageToMessageDecoder<DatagramPacket> {
+public class MessageDecoder extends MessageToMessageDecoder<DatagramPacket> {
     
     private int m_sequenceId = -1;
     

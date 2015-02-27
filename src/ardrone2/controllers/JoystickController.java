@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ardrone2.controller;
+package ardrone2.controllers;
 
 import ardrone2.ARDrone2;
 import ardrone2.DroneCommand;
@@ -25,7 +25,7 @@ import net.java.games.input.ControllerEnvironment;
  * Class JoystickController
  * @author Prostov Yury
  */
-public class JoystickController extends ardrone2.controller.Controller {
+public class JoystickController extends ardrone2.controllers.Controller {
     
     private Controller m_controller = null;
     private ControllerAxis m_axis = new ControllerAxis();

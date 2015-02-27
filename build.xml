@@ -16,6 +16,10 @@
 		<copy todir="./dist/native">
             <fileset dir="./jinput/native"/>
         </copy>
+		<echo>Copying play native dependant libraries</echo>
+		<copy todir="./dist/native">
+            <fileset dir="./play/native"/>
+        </copy>
 	</target>
 	
     <!--
