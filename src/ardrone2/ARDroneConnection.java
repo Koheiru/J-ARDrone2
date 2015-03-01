@@ -13,20 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package ardrone2;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
- * Interface DroneConnection
+ * Interface ARDroneConnection
  * @author Prostov Yury
  */
-public interface DroneConnection {
+public interface ARDroneConnection {
     
-    public static interface ConnectionListener extends Drone.Listener {
+    public static interface ConnectionListener {
         public void onConnectionStateChanged(ConnectionState state);
     }
+    
+    public void addConnectionListener(ConnectionListener listener);
+    
+    public void removeConnectionListener(ConnectionListener listener);
+    
     
     public ConnectionState connectionState();
     
@@ -40,6 +46,6 @@ public interface DroneConnection {
     
     public boolean waitForDisconnected(long msec) throws InterruptedException;
     
-    public void execute(DroneCommand command);
+    public void send(Command command);
     
 }

@@ -15,13 +15,13 @@
  */
 package ardrone2.commands;
 
-import ardrone2.DroneCommand;
+import ardrone2.Command;
 
 /**
  * Class EmergencyCommand
  * @author Prostov Yury
  */
-public class EmergencyCommand implements DroneCommand {
+public class EmergencyCommand implements Command {
     
     private static final int BASE_VALUE = (1 << 18) | (1 << 20)  | (1 << 22)  | (1 << 24)  | (1 << 28);
     private static final int EMERGENCY_VALUE = BASE_VALUE | (1 << 8);

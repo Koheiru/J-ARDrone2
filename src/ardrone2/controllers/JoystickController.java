@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package ardrone2.controllers;
 
 import ardrone2.ARDrone2;
-import ardrone2.DroneCommand;
+import ardrone2.Command;
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
@@ -30,13 +31,21 @@ public class JoystickController extends ardrone2.controllers.Controller {
     private Controller m_controller = null;
     private ControllerAxis m_axis = new ControllerAxis();
     
-    public JoystickController() {
+    public JoystickController() throws Exception {
         this(null);
     }
     
-    public JoystickController(ARDrone2 drone) {
+    public JoystickController(ARDrone2 drone) throws Exception {
         super(drone);
         m_controller = findController();
+        startExecutor();
+    }
+    
+    @Override
+    protected void finalize() throws Throwable {
+        stopExecutor();
+        m_controller = null;
+        super.finalize();
     }
     
     @Override
@@ -66,11 +75,8 @@ public class JoystickController extends ardrone2.controllers.Controller {
     }
 
     @Override
-    protected DroneCommand[] currentCommands() {
-        if (!checkController()) {
-            return null;
-        }
-        
+    protected Command[] currentCommands() {
+        //! TODO: implements some buttons.
         return null;
     }
     

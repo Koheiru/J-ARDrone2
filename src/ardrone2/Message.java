@@ -13,31 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ardrone2.impl;
-
-import ardrone2.DroneLed;
-import ardrone2.LedAnimation;
-import ardrone2.commands.LedCommand;
+package ardrone2;
 
 /**
- * Class DroneLedImpl
+ * Interface Message
  * @author Prostov Yury
  */
-public class DroneLedImpl 
-    extends DroneModule 
-    implements DroneLed {
-    
-    public DroneLedImpl() {
-    }
-    
-    @Override
-    public void animateLed(int animationId, float frequency, int duration) {
-        engine().send(new LedCommand(animationId, frequency, duration));
-    }
-    
-    @Override
-    public void animateLed(LedAnimation animationId, float frequency, int duration) {
-        animateLed(animationId.getValue(), frequency, duration);
-    }
-
+public interface Message {
 }

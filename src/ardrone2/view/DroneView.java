@@ -17,8 +17,8 @@
 package ardrone2.view;
 
 import ardrone2.ARDrone2;
-import ardrone2.DroneVision;
-import ardrone2.video.VideoFrame;
+import ardrone2.ARDroneVideo;
+import ardrone2.VideoFrame;
 import ardrone2.view.hud.ControlDrawer;
 import ardrone2.view.hud.StateDrawer;
 import java.awt.Color;
@@ -42,7 +42,7 @@ import javax.swing.JPanel;
  */
 public class DroneView extends JPanel {
     
-    private class DroneListener implements DroneVision.VisionListener {
+    private class DroneListener implements ARDroneVideo.VideoListener {
         @Override
         public void onVideoFrameReceived(VideoFrame videoFrame) {
             DroneView.this.m_videoFrame = videoFrame;
@@ -67,7 +67,7 @@ public class DroneView extends JPanel {
         detach();
         if (drone != null) {
             m_drone = drone;
-            m_drone.addListener(m_listener);
+            m_drone.addVideoListener(m_listener);
         }
     }
     
@@ -75,7 +75,7 @@ public class DroneView extends JPanel {
         if (m_drone == null) {
             return;
         }
-        m_drone.removeListener(m_listener);
+        m_drone.removeVideoListener(m_listener);
         m_drone = null;
     }
     

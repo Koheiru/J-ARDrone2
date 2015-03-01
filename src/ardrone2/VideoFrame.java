@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ardrone2.video;
+package ardrone2;
 
 import java.awt.image.BufferedImage;
 
@@ -24,7 +24,7 @@ import java.awt.image.BufferedImage;
  */
 public class VideoFrame extends BufferedImage {
 
-    private int m_number = -1;
+    private int m_frameNumber = -1;
     private int m_timestamp = -1;
     
     public VideoFrame(int width, int height) {
@@ -36,12 +36,12 @@ public class VideoFrame extends BufferedImage {
         getRaster().setDataElements(0, 0, width, height, data);
     }
     
-    public void setNumber(int number) {
-        m_number = number;
+    public void setFrameNumber(int frameNumber) {
+        m_frameNumber = frameNumber;
     }
     
-    public int number() {
-        return m_number;
+    public int frameNumber() {
+        return m_frameNumber;
     }
     
     public void setTimestamp(int timestamp) {

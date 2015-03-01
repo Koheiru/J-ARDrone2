@@ -15,13 +15,13 @@
  */
 package ardrone2.commands;
 
-import ardrone2.DroneCommand;
+import ardrone2.Command;
 
 /**
  * Class MoveCommand
  * @author Prostov Yury
  */
-public class MoveCommand implements DroneCommand {
+public class MoveCommand implements Command {
     
     private static final String NAME = "AT*PCMD";
     private static final int MOVE_FLAG = 1;

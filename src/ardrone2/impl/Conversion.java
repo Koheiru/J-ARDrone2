@@ -13,7 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ardrone2.math;
+package ardrone2.impl;
+
+import ardrone2.math.Dimension;
+import ardrone2.math.Point;
+import ardrone2.math.Vector3D;
 
 /**
  * Class Conversion

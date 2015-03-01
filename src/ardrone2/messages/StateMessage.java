@@ -15,15 +15,15 @@
  */
 package ardrone2.messages;
 
-import ardrone2.DroneMessage;
+import ardrone2.Message;
 
 /**
  * Class StateMessage
  * @author Prostov Yury
  */
-public class StateMessage implements DroneMessage {
+public class StateMessage implements Message {
     
-    private int m_state = 0;
+    public int flags = 0;
     
     /**** State flags ****/
     public static final int FLYING_FLAG              = 1;
@@ -58,28 +58,23 @@ public class StateMessage implements DroneMessage {
     public static final int COM_PROBLEM_FLAG         = 1 << 30;
     public static final int EMERGENCY_FLAG           = 1 << 31;
     
+    public StateMessage() {
+    }
+    
     public StateMessage(int flags) {
-        setState(flags);
+        this.flags = flags;
     }
     
-    public final void setState(int flags) {
-        m_state = flags;
+    public final void enableFlags(int enabledFlags) {
+        flags = flags | enabledFlags;
     }
     
-    public int state() {
-        return m_state;
+    public final void disableFlags(int disabledFlags) {
+        flags = flags & ~disabledFlags;
     }
     
-    public void enableFlags(int flags) {
-        m_state = m_state | flags;
-    }
-    
-    public void disableFlags(int flags) {
-        m_state = m_state & ~flags;
-    }
-    
-    public boolean isFlagsEnabled(int flags) {
-        return (Integer.bitCount(flags) == Integer.bitCount(m_state & flags));
+    public final boolean isFlagsEnabled(int testFlags) {
+        return (Integer.bitCount(testFlags) == Integer.bitCount(flags & testFlags));
     }
     
     @Override

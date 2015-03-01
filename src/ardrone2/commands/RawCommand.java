@@ -15,13 +15,13 @@
  */
 package ardrone2.commands;
 
-import ardrone2.DroneCommand;
+import ardrone2.Command;
 
 /**
  * Class RawCommand
  * @author Prostov Yury
  */
-public class RawCommand implements DroneCommand {
+public class RawCommand implements Command {
 
     private String m_name = null;
     private Object[] m_params = null;

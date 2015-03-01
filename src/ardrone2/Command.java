@@ -16,10 +16,10 @@
 package ardrone2;
 
 /**
- * Interface DroneCommand
+ * Interface Command
  * @author Prostov Yury
  */
-public interface DroneCommand {
+public interface Command {
     
     public String name();
     

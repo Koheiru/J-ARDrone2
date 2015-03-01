@@ -14,30 +14,17 @@
  * limitations under the License.
  */
 
-package ardrone2.impl;
+package ardrone2.video;
 
-import ardrone2.video.VideoFrame;
-import com.twilight.h264.decoder.AVFrame;
-import com.twilight.h264.decoder.AVPacket;
-import com.twilight.h264.decoder.H264Decoder;
-import com.twilight.h264.decoder.MpegEncContext;
-import static com.twilight.h264.player.H264Player.INBUF_SIZE;
-import com.twilight.h264.util.FrameUtils;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.MessageToMessageDecoder;
-import java.awt.image.MemoryImageSource;
-import java.io.FileOutputStream;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.IntBuffer;
-import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * Class VideoDecoder
+ * Class VideoFrameDecoder
  * @author Prostov Yury
  */
+public class VideoFrameDecoder {
+}
+
+/*
 public class VideoDecoder extends MessageToMessageDecoder<VideoPacket> {
     
     private class VideoDecoderWorker extends Thread {
@@ -60,7 +47,7 @@ public class VideoDecoder extends MessageToMessageDecoder<VideoPacket> {
             }
             
             if ((codec.capabilities & H264Decoder.CODEC_CAP_TRUNCATED) != 0) {
-                context.flags |= MpegEncContext.CODEC_FLAG_TRUNCATED; /* we do not send complete frames */
+                context.flags |= MpegEncContext.CODEC_FLAG_TRUNCATED; //!< Do not send complete frames.
             }
             
             int counter = 0;
@@ -71,17 +58,6 @@ public class VideoDecoder extends MessageToMessageDecoder<VideoPacket> {
                         // Means to stop decoding.
                         break;
                     }
-                    
-                    /*
-                    if (counter == 0) {
-                        counter = 1;
-                        FileOutputStream stream = new FileOutputStream("d:\\Work\\Develop\\h264j\\H264Player\\sample_clips\\test-4.264", true);
-                        stream.write(videoPacket.data);
-                    }
-                    if (true) {
-                        continue;
-                    }
-                    */
                     
                     int INBUF_SIZE = 65535;
                     //int intBufferSize = videoPacket.dataSize + MpegEncContext.FF_INPUT_BUFFER_PADDING_SIZE;
@@ -170,3 +146,4 @@ public class VideoDecoder extends MessageToMessageDecoder<VideoPacket> {
     }
 
 }
+*/

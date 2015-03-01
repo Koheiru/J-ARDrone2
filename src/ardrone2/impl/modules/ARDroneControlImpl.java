@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2015 Prostov Yury.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,41 +13,74 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ardrone2.impl;
 
+package ardrone2.impl.modules;
+
+import ardrone2.ARDroneControl;
 import ardrone2.ControlState;
-import ardrone2.DroneControl;
-import ardrone2.DroneMessage;
+import ardrone2.Message;
 import ardrone2.commands.ConfigCommand;
 import ardrone2.commands.EmergencyCommand;
 import ardrone2.commands.FlatTrimCommand;
-import ardrone2.messages.DemoMessage;
 import ardrone2.commands.HoverCommand;
 import ardrone2.commands.LandCommand;
 import ardrone2.commands.MoveCommand;
 import ardrone2.commands.TakeOffCommand;
+import ardrone2.impl.ARDroneEngine;
+import ardrone2.impl.ARDroneEngine.Channel;
+import ardrone2.impl.ARDroneEngine.ChannelState;
+import ardrone2.impl.ARDroneModule;
+import ardrone2.impl.ListenersList;
+import ardrone2.impl.codecs.DemoMessageDecoder;
+import ardrone2.impl.codecs.StateMessageDecoder;
+import ardrone2.messages.DemoMessage;
 
 /**
- * Class DroneControlImpl
+ * Class ARDroneControlImpl
  * @author Prostov Yury
  */
-public class DroneControlImpl
-    extends DroneModuleExt<DroneControl.ControlListener>
-    implements DroneControl, Engine.MessageReceiver {
+public class ARDroneControlImpl extends ARDroneModule implements ARDroneControl {
+    
+    private ListenersList m_listeners = null;
     
     private ControlState m_state = ControlState.Unknown;
-    private float m_altitude = 0.0f;
-    private float m_pitch = 0.0f;
-    private float m_roll = 0.0f;
-    private float m_yaw = 0.0f;
+    private float m_altitude  = 0.0f;
+    private float m_pitch     = 0.0f;
+    private float m_roll      = 0.0f;
+    private float m_yaw       = 0.0f;
     private float m_xVelocity = 0.0f;
     private float m_yVelocity = 0.0f;
     private float m_zVelocity = 0.0f;
-    
-    public DroneControlImpl() {
-        super(DroneControl.ControlListener.class);
+
+    public ARDroneControlImpl() {
+        super(Channel.MessagesStream, DemoMessageDecoder.class);
+        m_listeners = new ListenersList(ARDroneControl.ControlListener.class);
     }
     
+    @Override
+    public void initialize(ARDroneEngine engine) {
+        super.initialize(engine);
+        subscribeToStates();
+        subscribeToMessages();
+    }
+    
+    @Override
+    public void deinitialize() {
+        super.deinitialize();
+        subscribeToStates();
+        subscribeToMessages();
+    }
+
+    @Override
+    public void addControlListener(ControlListener listener) {
+        m_listeners.addListener(listener);
+    }
+
+    @Override
+    public void removeControlListener(ControlListener listener) {
+        m_listeners.removeListener(listener);
+    }
+
     @Override
     public ControlState controlState() {
         return m_state;
@@ -59,17 +92,17 @@ public class DroneControlImpl
     }
 
     @Override
-    public float pitchAngle() {
+    public float pitch() {
         return m_pitch;
     }
 
     @Override
-    public float rollAngle() {
+    public float roll() {
         return m_roll;
     }
 
     @Override
-    public float yawAngle() {
+    public float yaw() {
         return m_yaw;
     }
 
@@ -102,12 +135,12 @@ public class DroneControlImpl
     public void hover() {
         engine().send(new HoverCommand());
     }
-    
+
     @Override
     public void flatTrim() {
         engine().send(new FlatTrimCommand());
     }
-    
+
     @Override
     public void emergency() {
         engine().send(new EmergencyCommand());
@@ -124,25 +157,30 @@ public class DroneControlImpl
     }
     
     @Override
-    public void onStateChanged(Engine.State state) {
-        if (state == Engine.State.Connected) {
+    protected void onStateChanged(ChannelState state) {
+        if (state == ChannelState.Connected) {
             //! This module is want to get navdata.
             engine().send(new ConfigCommand("general:navdata_demo", "TRUE"));
         }
     }
     
     @Override
-    public void onMessageReceived(DroneMessage message) {
-        if (message instanceof DemoMessage) {
-            DemoMessage demoMessage = (DemoMessage)message;
-            boolean stateChanged = updateControlState(demoMessage.majorState(), demoMessage.minorState());
-            boolean directionChanged = updateDirection(demoMessage.altitude(), demoMessage.pitch(), demoMessage.roll(), demoMessage.yaw());
-            boolean velocityChanged = updateVelocity(demoMessage.xVelocity(), demoMessage.yVelocity(), demoMessage.zVelocity());
-            notifyListeners(stateChanged, directionChanged, velocityChanged);
+    protected void onMessageReceived(Message message) {
+        boolean isValidMessage = (message instanceof DemoMessage);
+        if (!isValidMessage) {
+            return;
         }
+        
+        DemoMessage demoMessage = (DemoMessage)message;
+        boolean stateChanged = updateControlState(demoMessage.state);
+        boolean directionChanged = updateDirection(demoMessage.altitude, demoMessage.pitch, demoMessage.roll, demoMessage.yaw);
+        boolean velocityChanged = updateVelocity(demoMessage.xVelocity, demoMessage.yVelocity, demoMessage.zVelocity);
+        notifyListeners(stateChanged, directionChanged, velocityChanged);
     }
     
-    private boolean updateControlState(int majorState, int minorState) {
+    private boolean updateControlState(int state) {
+        int majorState = state >> 16;
+        int minorState = state & 0x0000FFFF;
         ControlState newState = convertToControlState(majorState, minorState);
         if (m_state == newState) {
             return false;
@@ -188,7 +226,11 @@ public class DroneControlImpl
     }
     
     private void notifyListeners(boolean stateChanged, boolean directionChanged, boolean velocityChanged) {
-        DroneControl.ControlListener[] listeners = listeners();
+        if (!stateChanged && !directionChanged && !velocityChanged) {
+            return;
+        }
+        
+        ControlListener[] listeners = (ControlListener[])m_listeners.listeners();
         for (ControlListener listener: listeners) {
             //! TODO: think about splitting of this code...
             if (stateChanged)     { listener.onControlStateChanged(m_state); }

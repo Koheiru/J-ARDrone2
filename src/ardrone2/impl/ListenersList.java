@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2015 Prostov Yury.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,30 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package ardrone2.impl;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
-import ardrone2.Drone;
 
 /**
- * Class DroneModuleExt<T>
+ * Class ListenersList
  * @author Prostov Yury
  */
-public abstract class DroneModuleExt<T> 
-    extends DroneModule 
-    implements Engine.Handler {
+public class ListenersList<T> {
     
     private Class<T> m_type = null;
     private List<T> m_listeners = new ArrayList<>();
     private final Object m_lock = new Object();
     
-    public DroneModuleExt(Class<T> type) {
+    public ListenersList(Class<T> type) {
         m_type = type;
     }
     
-    protected T[] listeners() {
+    public T[] listeners() {
         T[] listeners = (T[]) Array.newInstance(m_type, 0);
         synchronized (m_lock) {
             listeners = m_listeners.toArray(listeners);
@@ -44,31 +42,19 @@ public abstract class DroneModuleExt<T>
         return listeners;
     }
     
-    @Override
-    public void addListener(Drone.Listener listener) {
-        if ((m_type == null) || !(m_type.isInstance(listener))) {
-            return;
-        }
-        
-        T typedListener = (T)listener;
+    public void addListener(T listener) {
         synchronized (m_lock) {
-            if (m_listeners.contains(typedListener)) {
+            if (m_listeners.contains(listener)) {
                 return;
             }
-            m_listeners.add(typedListener);
+            m_listeners.add(listener);
         }
     }
     
-    @Override
-    public void removeListener(Drone.Listener listener) {
-        if ((m_type == null) || !(m_type.isInstance(listener))) {
-            return;
-        }
-        
-        T typedListener = (T)listener;
+    public void removeListener(T listener) {
         synchronized (m_lock) {
-            m_listeners.remove(typedListener);
+            m_listeners.remove(listener);
         }
     }
-    
+
 }

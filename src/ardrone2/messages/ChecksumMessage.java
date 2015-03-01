@@ -15,35 +15,28 @@
  */
 package ardrone2.messages;
 
-import ardrone2.DroneMessage;
+import ardrone2.Message;
 
 /**
  * Class ChecksumMessage
  * @author Prostov Yury
  */
-public class ChecksumMessage implements DroneMessage {
+public class ChecksumMessage implements Message {
     
-    private int m_checksum = 0;
-        
-    public static final short TAG = (short)0xFFFF;
+    public int checksum = 0;
+    
+    public ChecksumMessage() {
+    }
     
     public ChecksumMessage(int checksum) {
-        setChecksum(checksum);
-    }
-    
-    public final void setChecksum(int checksum) {
-        m_checksum = checksum;
-    }
-    
-    public final int checksum() {
-        return m_checksum;
+        this.checksum = checksum;
     }
     
     @Override
     public String toString() {
         StringBuilder buffer = new StringBuilder();
         buffer.append("[ChecksumMessage]")
-              .append(" checksum: ").append(Integer.toHexString(m_checksum)).append(";");
+              .append(" checksum: ").append(Integer.toHexString(checksum)).append(";");
         return buffer.toString();
     }
     

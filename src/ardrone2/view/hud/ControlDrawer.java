@@ -44,7 +44,7 @@ public class ControlDrawer {
         double centerY = bounds.getCenterY();
         painter.translate(centerX, centerY);
         
-        double roll = drone.rollAngle() / 180.0 * Math.PI;
+        double roll = drone.roll() / 180.0 * Math.PI;
         painter.rotate(roll);
         
         int dawSize = 10;

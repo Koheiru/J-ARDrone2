@@ -13,44 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ardrone2.impl;
+package ardrone2.messages;
 
-import ardrone2.Drone;
+import ardrone2.Message;
 
 /**
- * Class DroneModule
+ * Class UnknownMessage
  * @author Prostov Yury
  */
-public abstract class DroneModule 
-    implements Engine.Handler {
+public class UnknownMessage implements Message {
     
-    private Engine m_engine = null;
-        
-    public void addListener(Drone.Listener listener) {
-        //! Empty by default.
+    public int    tag = 0;
+    public byte[] data = null;
+    
+    public UnknownMessage() {
     }
     
-    public void removeListener(Drone.Listener listener) {
-        //! Empty by default.
-    }
-    
-    protected Engine engine() {
-        return m_engine;
+    public UnknownMessage(int tag, byte[] data) {
+        this.tag = tag;
+        this.data = data;
     }
     
     @Override
-    public void initialize(Engine engine) {
-        m_engine = engine;
-    }
-    
-    @Override
-    public void uninitialize() {
-        m_engine = null;
-    }
-    
-    @Override
-    public void onStateChanged(Engine.State state) {
-        //! Empty by default.
+    public String toString() {
+        StringBuilder buffer = new StringBuilder();
+        buffer.append("([UnknownMessage]")
+              .append(" tag: 0x").append(Integer.toHexString(tag)).append(";")
+              .append(" data: [blob] with size ").append(data.length).append(")");
+        return buffer.toString();
     }
     
 }

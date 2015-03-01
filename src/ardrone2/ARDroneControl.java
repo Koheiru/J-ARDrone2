@@ -13,29 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package ardrone2;
 
 /**
- * Interface DroneControl
+ * Interface ARDroneControl
  * @author Prostov Yury
  */
-public interface DroneControl {
+public interface ARDroneControl {
     
-    public static interface ControlListener extends Drone.Listener {
+    public static interface ControlListener {
         public void onControlStateChanged(ControlState state);
         public void onDirectionChanged(float altitude, float pitch, float roll, float yaw);
         public void onVelocityChanged(float xVelocity, float yVelocity, float zVelocity);
     }
     
+    public void addControlListener(ControlListener listener);
+    
+    public void removeControlListener(ControlListener listener);
+    
+    
     public ControlState controlState();
     
     public float altitude();
     
-    public float pitchAngle();
+    public float pitch();
     
-    public float rollAngle();
+    public float roll();
     
-    public float yawAngle();
+    public float yaw();
     
     public float xVelocity();
     

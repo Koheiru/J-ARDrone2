@@ -15,13 +15,13 @@
  */
 package ardrone2.commands;
 
-import ardrone2.DroneCommand;
+import ardrone2.Command;
 
 /**
  * Class Drone
  * @author Prostov Yury
  */
-public class ControlCommand implements DroneCommand {
+public class ControlCommand implements Command {
     
     private static final String NAME = "AT*CTRL";
     private int m_param1 = 0;

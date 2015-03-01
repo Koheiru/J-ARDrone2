@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2015 Prostov Yury.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,29 +13,58 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ardrone2.impl;
 
+package ardrone2.impl.modules;
+
+import ardrone2.ARDroneConnection;
+import ardrone2.Command;
 import ardrone2.ConnectionState;
-import ardrone2.DroneConnection;
-import ardrone2.DroneCommand;
+import ardrone2.impl.ARDroneEngine;
+import ardrone2.impl.ARDroneEngine.Channel;
+import ardrone2.impl.ARDroneEngine.ChannelState;
+import ardrone2.impl.ARDroneModule;
+import ardrone2.impl.ListenersList;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
- * Class DroneConnectionImpl
+ * Class ARDroneConnectionImpl
  * @author Prostov Yury
  */
-public class DroneConnectionImpl
-    extends DroneModuleExt<DroneConnection.ConnectionListener>
-    implements DroneConnection {
+public class ARDroneConnectionImpl extends ARDroneModule implements ARDroneConnection {
 
+    private ListenersList m_listeners = null;
+    
     private ConnectionState m_state = ConnectionState.Disconnected;
     private final Object m_sync = new Object();
-    
-    public DroneConnectionImpl() {
-        super(DroneConnection.ConnectionListener.class);
-    }
         
+    public ARDroneConnectionImpl() {
+        super(Channel.MessagesStream);
+        m_listeners = new ListenersList(ARDroneConnection.ConnectionListener.class);
+    }
+    
+    @Override
+    public void initialize(ARDroneEngine engine) {
+        super.initialize(engine);
+        subscribeToStates();
+    }
+    
+    @Override
+    public void deinitialize() {
+        super.deinitialize();
+        subscribeToStates();
+    }
+
+    @Override
+    public void addConnectionListener(ConnectionListener listener) {
+        m_listeners.addListener(listener);
+    }
+
+    @Override
+    public void removeConnectionListener(ConnectionListener listener) {
+        m_listeners.removeListener(listener);
+    }
+
     @Override
     public ConnectionState connectionState() {
         synchronized (m_sync) {
@@ -44,11 +73,10 @@ public class DroneConnectionImpl
     }
 
     @Override
-    public boolean connect(String address) throws UnknownHostException
-    {
+    public boolean connect(String address) throws UnknownHostException {
         return connect(InetAddress.getByName(address));
     }
-    
+
     @Override
     public boolean connect(InetAddress address) throws UnknownHostException {
         return engine().connect(address);
@@ -70,13 +98,13 @@ public class DroneConnectionImpl
     }
 
     @Override
-    public void execute(DroneCommand command) {
+    public void send(Command command) {
         engine().send(command);
     }
     
     @Override
-    public void onStateChanged(Engine.State engineState) {
-        ConnectionState newState = convert(engineState);
+    protected void onStateChanged(ChannelState state) {
+        ConnectionState newState = convert(state);
         
         synchronized (m_sync) {
             if (m_state == newState) {
@@ -86,25 +114,9 @@ public class DroneConnectionImpl
             m_sync.notifyAll();
         }
         
-        Object[] lll = listeners();
-        DroneConnection.ConnectionListener[] listeners = (DroneConnection.ConnectionListener[]) lll;
+        ConnectionListener[] listeners = (ConnectionListener[])m_listeners.listeners();
         for (ConnectionListener listener: listeners) {
             listener.onConnectionStateChanged(newState);
-        }
-    }
-    
-    private ConnectionState convert(Engine.State engineState) {
-        if (engineState == Engine.State.Disconnected) {
-            return ConnectionState.Disconnected;
-        }
-        else if (engineState == Engine.State.Connecting) {
-            return ConnectionState.Connecting;
-        }
-        else if (engineState == Engine.State.Connected) {
-            return ConnectionState.Connected;
-        }
-        else {
-            return ConnectionState.Disconnecting;
         }
     }
     
@@ -127,6 +139,21 @@ public class DroneConnectionImpl
                     elapsedTime = System.currentTimeMillis() - beginTimestamp;
                 }
             }
+        }
+    }
+    
+    private static ConnectionState convert(ARDroneEngine.ChannelState channelState) {
+        if (channelState == ARDroneEngine.ChannelState.Disconnected) {
+            return ConnectionState.Disconnected;
+        }
+        else if (channelState == ARDroneEngine.ChannelState.Connecting) {
+            return ConnectionState.Connecting;
+        }
+        else if (channelState == ARDroneEngine.ChannelState.Connected) {
+            return ConnectionState.Connected;
+        }
+        else {
+            return ConnectionState.Disconnecting;
         }
     }
     

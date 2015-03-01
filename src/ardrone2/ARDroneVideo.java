@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2015 Prostov Yury.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,22 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package ardrone2;
 
 /**
- * Interface DroneState
+ * Interface ARDroneVideo
  * @author Prostov Yury
  */
-public interface DroneState {
+public interface ARDroneVideo {
     
-    public static interface StateListener extends Drone.Listener {
-        public void onBatteryLevelChanged(int batteryLevel);
+    public static interface VideoListener {
+        public void onVideoFrameReceived(VideoFrame videoFrame);
     }
     
-    public int batteryLevel();
+    public void addVideoListener(VideoListener listener);
     
-    public boolean isBatteryTooLow();
+    public void removeVideoListener(VideoListener listener);
     
-    public boolean isBatteryTooHigh();
+    
+    public VideoFrame videoFrame();
     
 }

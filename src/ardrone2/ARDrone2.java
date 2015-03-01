@@ -13,224 +13,256 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package ardrone2;
 
-import ardrone2.impl.DroneControlImpl;
-import ardrone2.impl.Engine;
-import ardrone2.impl.DroneModule;
-import ardrone2.impl.DroneStateImpl;
-import ardrone2.impl.EngineImpl;
-import ardrone2.impl.DroneLedImpl;
-import ardrone2.impl.DroneConnectionImpl;
-import ardrone2.impl.DroneVisionImpl;
-import ardrone2.video.VideoFrame;
+import ardrone2.impl.ARDroneEngine;
+import ardrone2.impl.ARDroneModule;
+import ardrone2.impl.engine.ARDroneEngineImpl;
+import ardrone2.impl.modules.ARDroneConnectionImpl;
+import ardrone2.impl.modules.ARDroneControlImpl;
+import ardrone2.impl.modules.ARDroneLedImpl;
+import ardrone2.impl.modules.ARDroneStateImpl;
+import ardrone2.impl.modules.ARDroneVideoImpl;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * Class ARDrone2
  * @author Prostov Yury
  */
-public class ARDrone2
-    implements Drone, DroneConnection, DroneState, DroneControl, DroneLed, DroneVision {
-
-    private EngineImpl m_engine = null;
-    private List<Engine.Handler> m_handlers = new ArrayList<>();
-    private List<DroneModule> m_modules = new ArrayList<>();
+public class ARDrone2 
+implements ARDroneConnection, 
+           ARDroneControl,
+           ARDroneState,
+           ARDroneVideo,
+           ARDroneLed {
     
-    private DroneConnectionImpl m_droneConnector = null;
-    private DroneStateImpl     m_droneState     = null;
-    private DroneControlImpl   m_droneControl   = null;
-    private DroneLedImpl       m_droneLed       = null;
-    private DroneVisionImpl    m_droneVision    = null;
+    private ARDroneEngine     m_engine;
+    private List<ARDroneModule> m_modules;
+    
+    private ARDroneConnection m_connectionModule;
+    private ARDroneControl    m_controlModule;
+    private ARDroneState      m_stateModule;
+    private ARDroneVideo      m_videoModule;
+    private ARDroneLed        m_ledModule;
+    
     
     public ARDrone2() {
-        m_droneConnector = new DroneConnectionImpl();
-        m_modules.add(m_droneConnector);
-        m_handlers.add(m_droneConnector);
+        m_engine = new ARDroneEngineImpl();
+        m_modules = new ArrayList();
         
-        m_droneState = new DroneStateImpl();
-        m_modules.add(m_droneState);
-        m_handlers.add(m_droneState);
+        m_connectionModule = new ARDroneConnectionImpl();
+        m_modules.add((ARDroneModule)m_connectionModule);
         
-        m_droneControl = new DroneControlImpl();
-        m_modules.add(m_droneControl);
-        m_handlers.add(m_droneControl);
+        m_controlModule = new ARDroneControlImpl();
+        m_modules.add((ARDroneModule)m_controlModule);
         
-        m_droneLed = new DroneLedImpl();
-        m_modules.add(m_droneLed);
-        m_handlers.add(m_droneLed);
+        m_stateModule = new ARDroneStateImpl();
+        m_modules.add((ARDroneModule)m_stateModule);
         
-        m_droneVision = new DroneVisionImpl();
-        m_modules.add(m_droneVision);
-        m_handlers.add(m_droneVision);
+        m_videoModule = new ARDroneVideoImpl();
+        m_modules.add((ARDroneModule)m_videoModule);
         
-        m_engine = new EngineImpl();
-        m_engine.initialize(m_handlers);
-    }
+        m_ledModule = new ARDroneLedImpl();
+        m_modules.add((ARDroneModule)m_ledModule);
+        
+        for (ARDroneModule module: m_modules) {
+            module.initialize(m_engine);
+        }
+    }    
     
     @Override
     protected void finalize() throws Throwable {
+        //! We use such deinitialization to break ring dependency between
+        // engine and module objects which can leds to memory leaks.
+        for (ARDroneModule module: m_modules) {
+            module.deinitialize();
+        }
         super.finalize();
-        m_engine.uninitialize();
-        m_handlers.clear();
-        m_modules.clear();
     }
     
     @Override
-    public void addListener(Drone.Listener listener) {
-        for (DroneModule module : m_modules) {
-            module.addListener(listener);
-        }
+    public void addConnectionListener(ConnectionListener listener) {
+        m_connectionModule.addConnectionListener(listener);
     }
 
     @Override
-    public void removeListener(Drone.Listener listener) {
-        for (DroneModule module : m_modules) {
-            module.removeListener(listener);
-        }
-        
+    public void removeConnectionListener(ConnectionListener listener) {
+        m_connectionModule.removeConnectionListener(listener);
     }
-    
+
     @Override
     public ConnectionState connectionState() {
-        return m_droneConnector.connectionState();
+        return m_connectionModule.connectionState();
     }
 
     @Override
     public boolean connect(String address) throws UnknownHostException {
-        return m_droneConnector.connect(address);
+        return m_connectionModule.connect(address);
     }
 
     @Override
     public boolean connect(InetAddress address) throws UnknownHostException {
-        return m_droneConnector.connect(address);
+        return m_connectionModule.connect(address);
     }
 
     @Override
     public void disconnect() {
-        m_droneConnector.disconnect();
+        m_connectionModule.disconnect();
     }
 
     @Override
     public boolean waitForConnected(long msec) throws InterruptedException {
-        return m_droneConnector.waitForConnected(msec);
+        return m_connectionModule.waitForConnected(msec);
     }
 
     @Override
     public boolean waitForDisconnected(long msec) throws InterruptedException {
-        return m_droneConnector.waitForDisconnected(msec);
+        return m_connectionModule.waitForDisconnected(msec);
     }
 
     @Override
-    public void execute(DroneCommand command) {
-        m_droneConnector.execute(command);
+    public void send(Command command) {
+        m_connectionModule.send(command);
     }
 
     @Override
-    public int batteryLevel() {
-        return m_droneState.batteryLevel();
+    public void addControlListener(ControlListener listener) {
+        m_controlModule.addControlListener(listener);
     }
 
     @Override
-    public boolean isBatteryTooLow() {
-        return m_droneState.isBatteryTooLow();
-    }
-
-    @Override
-    public boolean isBatteryTooHigh() {
-        return m_droneState.isBatteryTooHigh();
+    public void removeControlListener(ControlListener listener) {
+        m_controlModule.removeControlListener(listener);
     }
 
     @Override
     public ControlState controlState() {
-        return m_droneControl.controlState();
+        return m_controlModule.controlState();
     }
 
     @Override
     public float altitude() {
-        return m_droneControl.altitude();
+        return m_controlModule.altitude();
     }
 
     @Override
-    public float pitchAngle() {
-        return m_droneControl.pitchAngle();
+    public float pitch() {
+        return m_controlModule.pitch();
     }
 
     @Override
-    public float rollAngle() {
-        return m_droneControl.rollAngle();
+    public float roll() {
+        return m_controlModule.roll();
     }
 
     @Override
-    public float yawAngle() {
-        return m_droneControl.yawAngle();
+    public float yaw() {
+        return m_controlModule.yaw();
     }
 
     @Override
     public float xVelocity() {
-        return m_droneControl.xVelocity();
+        return m_controlModule.xVelocity();
     }
 
     @Override
     public float yVelocity() {
-        return m_droneControl.yVelocity();
+        return m_controlModule.yVelocity();
     }
 
     @Override
     public float zVelocity() {
-        return m_droneControl.zVelocity();
+        return m_controlModule.zVelocity();
     }
 
     @Override
     public void takeOff() {
-        m_droneControl.takeOff();
+        m_controlModule.takeOff();
     }
 
     @Override
     public void land() {
-        m_droneControl.land();
+        m_controlModule.land();
     }
 
     @Override
     public void hover() {
-        m_droneControl.hover();
+        m_controlModule.hover();
     }
-    
+
     @Override
     public void flatTrim() {
-        m_droneControl.flatTrim();
+        m_controlModule.flatTrim();
     }
-    
+
     @Override
     public void emergency() {
-        m_droneControl.emergency();
+        m_controlModule.emergency();
     }
 
     @Override
     public void move(float pitch, float roll, float yaw, float gaz) {
-        m_droneControl.move(pitch, roll, yaw, gaz);
+        m_controlModule.move(pitch, roll, yaw, gaz);
     }
 
     @Override
     public void move(float pitch, float roll, float yaw, float gaz, boolean isCombinedYaw) {
-        m_droneControl.move(pitch, roll, yaw, gaz, isCombinedYaw);
+        m_controlModule.move(pitch, roll, yaw, gaz, isCombinedYaw);
     }
 
     @Override
-    public void animateLed(int animationId, float frequency, int duration) {
-        m_droneLed.animateLed(animationId, frequency, duration);
+    public void addStateListener(StateListener listener) {
+        m_stateModule.addStateListener(listener);
     }
-    
+
     @Override
-    public void animateLed(LedAnimation animationId, float frequency, int duration) {
-        m_droneLed.animateLed(animationId, frequency, duration);
+    public void removeStateListener(StateListener listener) {
+        m_stateModule.removeStateListener(listener);
     }
-    
+
+    @Override
+    public int batteryLevel() {
+        return m_stateModule.batteryLevel();
+    }
+
+    @Override
+    public boolean isBatteryTooLow() {
+        return m_stateModule.isBatteryTooLow();
+    }
+
+    @Override
+    public boolean isBatteryTooHigh() {
+        return m_stateModule.isBatteryTooHigh();
+    }
+
+    @Override
+    public void addVideoListener(VideoListener listener) {
+        m_videoModule.addVideoListener(listener);
+    }
+
+    @Override
+    public void removeVideoListener(VideoListener listener) {
+        m_videoModule.removeVideoListener(listener);
+    }
+
     @Override
     public VideoFrame videoFrame() {
-        return m_droneVision.videoFrame();
+        return m_videoModule.videoFrame();
     }
+    
+    @Override
+    public void animateLed(int animationId, float frequency, float duration) {
+        m_ledModule.animateLed(animationId, frequency, duration);
+    }
+
+    @Override
+    public void animateLed(LedAnimation animationId, float frequency, float duration) {
+        m_ledModule.animateLed(animationId, frequency, duration);
+    }
+    
 }

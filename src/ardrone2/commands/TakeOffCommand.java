@@ -15,13 +15,13 @@
  */
 package ardrone2.commands;
 
-import ardrone2.DroneCommand;
+import ardrone2.Command;
 
 /**
  * Class TakeOffCommand
  * @author Prostov Yury
  */
-public class TakeOffCommand implements DroneCommand {
+public class TakeOffCommand implements Command {
     
     private static final int BASE_VALUE = (1 << 18) | (1 << 20)  | (1 << 22)  | (1 << 24)  | (1 << 28);
     private static final int TAKE_OFF_VALUE = BASE_VALUE | (1 << 9);

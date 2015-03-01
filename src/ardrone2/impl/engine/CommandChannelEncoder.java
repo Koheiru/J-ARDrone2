@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2015 Prostov Yury.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,29 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ardrone2.impl;
 
+package ardrone2.impl.engine;
+
+import ardrone2.Command;
+import ardrone2.commands.WatchdogCommand;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
-import ardrone2.DroneCommand;
-import ardrone2.commands.WatchDogCommand;
 
 /**
- * Class CommandEncoder
+ * Class CommandChannelEncoder
  * @author Prostov Yury
  */
-public class CommandEncoder extends MessageToByteEncoder<DroneCommand> {
+public class CommandChannelEncoder extends MessageToByteEncoder<Command> {
 
     private int m_sequenceId = 0;
     
-    public void reset() {
-        m_sequenceId = 0;
-    }
-    
     @Override
-    protected void encode(ChannelHandlerContext context, DroneCommand command, ByteBuf out) throws Exception {
-        if (command instanceof WatchDogCommand) {
+    protected void encode(ChannelHandlerContext context, Command command, ByteBuf out) throws Exception {
+        if (command instanceof WatchdogCommand) {
             StringBuilder buffer = new StringBuilder();
             buffer.append(command.name()).append('\r');
             out.writeBytes(buffer.toString().getBytes("ASCII"));

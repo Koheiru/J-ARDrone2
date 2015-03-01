@@ -13,23 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ardrone2;
+package ardrone2.commands;
 
-import java.util.List;
+import ardrone2.Command;
 
 /**
- * Interface DroneInterception
+ * Class WatchdogCommand
  * @author Prostov Yury
  */
-public interface DroneInterception {
+public class WatchdogCommand implements Command {
     
-    public static interface Interceptor {
-        public void handleCommand(DroneCommand input, List<DroneCommand> output);
-        public void handleMessage(DroneMessage input, List<DroneMessage> output);
+    private static final String NAME = "AT*COMWDG";
+    
+    @Override
+    public String name() {
+        return NAME;
     }
-    
-    public void addInterceptor(Interceptor interceptor);
-    
-    public void removeInterceptor(Interceptor interceptor);
+
+    @Override
+    public Object[] parameters() {
+        return null;
+    }
     
 }

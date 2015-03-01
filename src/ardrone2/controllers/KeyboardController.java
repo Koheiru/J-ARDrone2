@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package ardrone2.controllers;
 
 import java.awt.event.KeyEvent;
@@ -23,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.JFrame;
 import ardrone2.ARDrone2;
-import ardrone2.DroneCommand;
+import ardrone2.Command;
 import ardrone2.commands.EmergencyCommand;
 import ardrone2.commands.FlatTrimCommand;
 import ardrone2.commands.HoverCommand;
@@ -46,7 +47,7 @@ public class KeyboardController extends Controller {
         public void keyPressed(KeyEvent keyEvent) {
             int code = keyEvent.getKeyCode();
             
-            DroneCommand command = m_bindMap.get(code);
+            Command command = m_bindMap.get(code);
             if (command != null) {
                 synchronized (m_sync) { m_commands.add(command); }
             }
@@ -90,56 +91,42 @@ public class KeyboardController extends Controller {
     
     private JFrame m_window = null;
     private KeyboardListener m_listener = new KeyboardListener();
-    private Map<Integer, DroneCommand> m_bindMap = new HashMap<>();
+    private Map<Integer, Command> m_bindMap = defaultBindMap();
     
     private final Object m_sync = new Object();
     private ControllerAxis m_axis = new ControllerAxis();
-    private List<DroneCommand> m_commands = new ArrayList<>();
+    private List<Command> m_commands = new ArrayList<>();
     
     
-    public KeyboardController(JFrame window) {
+    public KeyboardController(JFrame window) throws Exception {
         this(window, null);
     }
     
-    public KeyboardController(JFrame window, ARDrone2 drone) {
+    public KeyboardController(JFrame window, ARDrone2 drone) throws Exception {
         super(drone);
         m_window = window;
-        m_bindMap = defaultBindMap();
+        m_window.addKeyListener(m_listener);
+        startExecutor();
     }
     
     @Override
     protected void finalize() throws Throwable {
+        stopExecutor();
         m_window.removeKeyListener(m_listener);
         m_window = null;
         super.finalize();
     }
     
-    public void setCommand(int key, DroneCommand command) {
+    public void setCommand(int key, Command command) {
         m_bindMap.put(key, command);
     }
     
-    public DroneCommand command(int key) {
+    public Command command(int key) {
         return m_bindMap.get(key);
     }
     
-    public Map<Integer, DroneCommand> commands() {
+    public Map<Integer, Command> commands() {
         return m_bindMap;
-    }
-    
-    @Override
-    public boolean start() {
-        synchronized (m_sync) {
-            m_axis = new ControllerAxis();
-            m_commands.clear();
-        }
-        m_window.addKeyListener(m_listener);
-        return super.start();
-    }
-    
-    @Override
-    public void stop() throws Exception {
-        m_window.removeKeyListener(m_listener);
-        super.stop();
     }
     
     @Override
@@ -155,8 +142,8 @@ public class KeyboardController extends Controller {
     }
 
     @Override
-    protected DroneCommand[] currentCommands() {
-        DroneCommand[] commands = new DroneCommand[0];
+    protected Command[] currentCommands() {
+        Command[] commands = new Command[0];
         synchronized (m_sync) {
             commands = m_commands.toArray(commands);
             m_commands.clear();
@@ -164,8 +151,8 @@ public class KeyboardController extends Controller {
         return commands;
     }
     
-    private static HashMap<Integer, DroneCommand> defaultBindMap() {
-        HashMap<Integer, DroneCommand> bindMap = new HashMap<>();
+    private static HashMap<Integer, Command> defaultBindMap() {
+        HashMap<Integer, Command> bindMap = new HashMap<>();
         bindMap.put(KeyEvent.VK_ENTER, new EmergencyCommand());
         bindMap.put(KeyEvent.VK_C,     new FlatTrimCommand());
         bindMap.put(KeyEvent.VK_SPACE, new HoverCommand());

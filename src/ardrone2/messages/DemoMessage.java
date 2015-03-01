@@ -15,25 +15,23 @@
  */
 package ardrone2.messages;
 
-import ardrone2.DroneMessage;
+import ardrone2.Message;
 
 /**
  * Class DemoMessage
  * @author Prostov Yury
  */
-public class DemoMessage implements DroneMessage {
+public class DemoMessage implements Message {
     
-    private int   m_state        = 0;
-    private int   m_batteryLevel = 0;
-    private float m_altitude     = 0.0f;
-    private float m_pitch        = 0.0f;
-    private float m_roll         = 0.0f;
-    private float m_yaw          = 0.0f;
-    private float m_xVelocity    = 0.0f;
-    private float m_yVelocity    = 0.0f;
-    private float m_zVelocity    = 0.0f;
-    
-    public static final short TAG = (short)0x0000;
+    public int   state        = 0;
+    public int   batteryLevel = 0;
+    public float altitude     = 0.0f;
+    public float pitch        = 0.0f;
+    public float roll         = 0.0f;
+    public float yaw          = 0.0f;
+    public float xVelocity    = 0.0f;
+    public float yVelocity    = 0.0f;
+    public float zVelocity    = 0.0f;
     
     /**** Major state ****/
     public static final short MAJOR_STATE_DEFAULT       = 0;
@@ -86,81 +84,36 @@ public class DemoMessage implements DroneMessage {
     public static final short MINOR_STATE_LANDING_OPEN_LOOP      = 1;
     public static final short MINOR_STATE_LANDING_OPEN_LOOP_FAST = 2;
     
+    public DemoMessage() {
+    }
+    
     public DemoMessage(int majorState, int minorState, int batteryLevel, 
                        float altitude, float pitch, float roll, float yaw, 
                        float xVelocity, float yVelocity, float zVelocity) {
-        m_state        = (majorState << 16) | (minorState & 0xFFFF);
-        m_batteryLevel = batteryLevel;
-        m_altitude     = altitude;
-        m_pitch        = pitch;
-        m_roll         = roll;
-        m_yaw          = yaw;
-        m_xVelocity    = xVelocity;
-        m_yVelocity    = yVelocity;
-        m_zVelocity    = zVelocity;
-    }
-    
-    private void setMajorState(int majorState) {
-        m_state = (majorState << 16) | (m_state & 0xFFFF);
-    }
-    
-    public final int majorState() {
-        return ((m_state >> 16) & 0xFFFF);
-    }
-    
-    private final void setMinorState(int minorState) {
-        m_state = (m_state & 0xFFFF0000) | (minorState & 0xFFFF);
-    }
-    
-    public final int minorState() {
-        return (m_state & 0xFFFF);
-    }
-    
-    public final int batteryLevel() {
-        return m_batteryLevel;
-    }
-    
-    public final float altitude() {
-        return m_altitude;
-    }
-    
-    public final float pitch() {
-        return m_pitch;
-    }
-    
-    public final float roll() {
-        return m_roll;
-    }
-    
-    public final float yaw() {
-        return m_yaw;
-    }
-    
-    public final float xVelocity() {
-        return m_xVelocity;
-    }
-    
-    public final float yVelocity() {
-        return m_yVelocity;
-    }
-    
-    public final float zVelocity() {
-        return m_zVelocity;
+        this.state        = (majorState << 16) | (minorState & 0xFFFF);
+        this.batteryLevel = batteryLevel;
+        this.altitude     = altitude;
+        this.pitch        = pitch;
+        this.roll         = roll;
+        this.yaw          = yaw;
+        this.xVelocity    = xVelocity;
+        this.yVelocity    = yVelocity;
+        this.zVelocity    = zVelocity;
     }
     
     @Override
     public String toString() {
         StringBuilder buffer = new StringBuilder();
         buffer.append("[DemoMessage]")
-              .append(" state: ").append(Integer.toHexString(m_state)).append(";")
-              .append(" battery: ").append(m_batteryLevel).append(";")
-              .append(" altitude: ").append(m_altitude).append(";")
-              .append(" pitch: ").append(m_pitch).append(";")
-              .append(" roll: ").append(m_roll).append(";")
-              .append(" yaw: ").append(m_yaw).append(";")
-              .append(" velocity_x: ").append(m_xVelocity).append(";")
-              .append(" velocity_y: ").append(m_yVelocity).append(";")
-              .append(" velocity_z: ").append(m_zVelocity).append(";");
+              .append(" state: ").append(Integer.toHexString(state)).append(";")
+              .append(" battery: ").append(batteryLevel).append(";")
+              .append(" altitude: ").append(altitude).append(";")
+              .append(" pitch: ").append(pitch).append(";")
+              .append(" roll: ").append(roll).append(";")
+              .append(" yaw: ").append(yaw).append(";")
+              .append(" velocity_x: ").append(xVelocity).append(";")
+              .append(" velocity_y: ").append(yVelocity).append(";")
+              .append(" velocity_z: ").append(zVelocity).append(";");
         return buffer.toString();
     }
     

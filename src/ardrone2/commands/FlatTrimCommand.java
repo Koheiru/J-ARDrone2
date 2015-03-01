@@ -15,13 +15,13 @@
  */
 package ardrone2.commands;
 
-import ardrone2.DroneCommand;
+import ardrone2.Command;
 
 /**
  * Class FlatTrimCommand
  * @author Prostov Yury
  */
-public class FlatTrimCommand implements DroneCommand {
+public class FlatTrimCommand implements Command {
     
     private static final String NAME = "AT*FTRIM";
     

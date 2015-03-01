@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2015 Prostov Yury.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,26 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ardrone2.commands;
 
-import ardrone2.DroneCommand;
+package ardrone2.impl.modules;
+
+import ardrone2.ARDroneLed;
+import ardrone2.LedAnimation;
+import ardrone2.commands.LedCommand;
+import ardrone2.impl.ARDroneModule;
 
 /**
- * Class WatchDogCommand
+ * Class ARDroneLedImpl
  * @author Prostov Yury
  */
-public class WatchDogCommand implements DroneCommand {
+public class ARDroneLedImpl extends ARDroneModule implements ARDroneLed {
     
-    private static final String NAME = "AT*COMWDG";
-    
-    @Override
-    public String name() {
-        return NAME;
+    public ARDroneLedImpl() {
+        super();
     }
 
     @Override
-    public Object[] parameters() {
-        return null;
+    public void animateLed(int animationId, float frequency, float duration) {
+        engine().send(new LedCommand(animationId, frequency, duration));
+    }
+
+    @Override
+    public void animateLed(LedAnimation animationId, float frequency, float duration) {
+        animateLed(animationId.getValue(), frequency, duration);
     }
     
 }

@@ -15,13 +15,13 @@
  */
 package ardrone2.commands;
 
-import ardrone2.DroneCommand;
+import ardrone2.Command;
 
 /**
  * Class CalibrationCommand
  * @author Prostov Yury
  */
-public class CalibrationCommand implements DroneCommand {
+public class CalibrationCommand implements Command {
     
     private static final String NAME = "AT*CALIB";
     private int m_deviceId = 0;

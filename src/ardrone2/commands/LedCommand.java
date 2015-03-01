@@ -15,15 +15,18 @@
  */
 package ardrone2.commands;
 
-import ardrone2.DroneCommand;
-import ardrone2.DroneLed;
+//import ardrone2.DroneLed;
+
+import ardrone2.Command;
 import ardrone2.LedAnimation;
+
+//import ardrone2.LedAnimation;
 
 /**
  * Class LedCommand
  * @author Prostov Yury
  */
-public class LedCommand implements DroneCommand {
+public class LedCommand implements Command {
     
     private static final String NAME = "AT*LED";
     private int   m_animationId = 0;
@@ -34,10 +37,20 @@ public class LedCommand implements DroneCommand {
         this(animation.getValue(), frequency, duration);
     }
     
+    public LedCommand(LedAnimation animation, float frequency, float duration) {
+        this(animation.getValue(), frequency, duration);
+    }
+    
     public LedCommand(int animationId, float frequency, int duration) {
         m_animationId        = animationId;
         m_animationFrequency = frequency;
         m_animationDuration  = duration;
+    }
+    
+    public LedCommand(int animationId, float frequency, float duration) {
+        m_animationId        = animationId;
+        m_animationFrequency = frequency;
+        m_animationDuration  = (int)duration;
     }
     
     @Override

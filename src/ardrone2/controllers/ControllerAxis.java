@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package ardrone2.controllers;
 
 /**
@@ -20,23 +21,19 @@ package ardrone2.controllers;
  * @author Prostov Yury
  */
 public class ControllerAxis {
-    public float pitch;
-    public float roll;
-    public float yaw;
-    public float gaz;
+    public float pitch = 0.0f;
+    public float roll  = 0.0f;
+    public float yaw   = 0.0f;
+    public float gaz   = 0.0f;
     
     public ControllerAxis() {
-        this.pitch = 0.0f;
-        this.roll = 0.0f;
-        this.yaw = 0.0f;
-        this.gaz = 0.0f;
     }
     
     public ControllerAxis(float pitch, float roll, float yaw, float gaz) {
         this.pitch = pitch;
-        this.roll = roll;
-        this.yaw = yaw;
-        this.gaz = gaz;
+        this.roll  = roll;
+        this.yaw   = yaw;
+        this.gaz   = gaz;
     }
     
     @Override

@@ -15,13 +15,13 @@
  */
 package ardrone2.commands;
 
-import ardrone2.DroneCommand;
+import ardrone2.Command;
 
 /**
  * Class LandCommand
  * @author Prostov Yury
  */
-public class LandCommand  implements DroneCommand {
+public class LandCommand  implements Command {
     
     private static final int BASE_VAUE = (1 << 18) | (1 << 20)  | (1 << 22)  | (1 << 24)  | (1 << 28);
     private static final int LAND_VALUE = BASE_VAUE;

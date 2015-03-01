@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package ardrone2.impl;
-
+package ardrone2.messages;
 
 /**
- * Class VideoPacket
+ * Class VideoMessage
  * @author Prostov Yury
  */
-public class VideoPacket {
+public class VideoMessage {    
     public int version;
     public int videoCodec;
     public int headerSize;
@@ -45,4 +44,14 @@ public class VideoPacket {
     public int ppsHeaderSize;
     public byte[] data;
     public int    dataSize;
+    
+    public VideoMessage() {
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder buffer = new StringBuilder();
+        buffer.append("([VideoMessage])");
+        return buffer.toString();
+    }
 }

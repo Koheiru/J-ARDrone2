@@ -15,17 +15,17 @@
  */
 package ardrone2.test;
 
+import ardrone2.ARDrone2;
+import ardrone2.ConnectionState;
+import ardrone2.ControlState;
+import ardrone2.LedAnimation;
+import ardrone2.commands.LedCommand;
 import ardrone2.controllers.KeyboardController;
-import ardrone2.controllers.JoystickController;
 import java.awt.event.KeyEvent;
-import java.net.Inet4Address;
+import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
-import ardrone2.*;
-import ardrone2.commands.*;
-import ardrone2.video.VideoFrame;
-import ardrone2.view.DroneView;
-import java.awt.BorderLayout;
+import java.net.Inet4Address;
 
 /**
  * Class Test
@@ -42,16 +42,10 @@ public class Test {
         frame.setSize(400, 300);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         
-        test_ardrone2();
-        //test_controllers();
-    }
-    
-    private static void test_ardrone2() throws Exception {
-        
         ARDrone2 drone = new ARDrone2();
-        frame.add(new DroneView(drone), BorderLayout.CENTER);
+        //frame.add(new DroneView(drone), BorderLayout.CENTER);
         
-        drone.addListener(new ARDrone2.ConnectionListener() {
+        drone.addConnectionListener(new ARDrone2.ConnectionListener() {
             @Override
             public void onConnectionStateChanged(ConnectionState state) {
                 if (state == ConnectionState.Disconnected) {
@@ -69,7 +63,7 @@ public class Test {
             }
         });
         
-        drone.addListener(new ARDrone2.ControlListener() {
+        drone.addControlListener(new ARDrone2.ControlListener() {
             @Override
             public void onControlStateChanged(ControlState state) {
                 if (state == ControlState.Flying) {
@@ -94,31 +88,40 @@ public class Test {
             @Override
             public void onDirectionChanged(float altitude, float pitch, float roll, float yaw) {
                 /*
-                System.out.print("Drone direction: [");
-                System.out.print(pitch);    System.out.print(", ");
-                System.out.print(roll);     System.out.print(", ");
-                System.out.print(yaw);      System.out.print(" | ");
-                System.out.print(altitude); System.out.println("]");
+                String text = new StringBuilder()
+                        .append("Drone direction: ")
+                        .append(pitch).append(", ")
+                        .append(roll).append(", ")
+                        .append(yaw).append(" | ")
+                        .append(altitude).toString();
+                System.out.println(text);
                 */
             }
             @Override
             public void onVelocityChanged(float xVelocity, float yVelocity, float zVelocity) {
+                /*
+                String text = new StringBuilder()
+                        .append("Drone velocity: ")
+                        .append(xVelocity).append(", ")
+                        .append(yVelocity).append(", ")
+                        .append(zVelocity).toString();
+                System.out.println(text);
+                */
             }
         });
         
-        drone.addListener(new ARDrone2.StateListener() {
+        drone.addStateListener(new ARDrone2.StateListener() {
             @Override
             public void onBatteryLevelChanged(int batteryLevel) {
                 System.out.print("Drone battery level: ");
                 System.out.println(batteryLevel);
             }
-        });
-        
-        drone.addListener(new ARDrone2.StateListener() {
             @Override
-            public void onBatteryLevelChanged(int batteryLevel) {
-                System.out.print("Drone batary level changed: ");
-                System.out.println(Integer.toString(batteryLevel));
+            public void onBatteryFlagsChanged(boolean isTooLow, boolean isTooHigh) {
+                System.out.print("Drone battery is too low: ");
+                System.out.println(isTooLow);
+                System.out.print("Drone battery is too high: ");
+                System.out.println(isTooHigh);
             }
         });
         
@@ -129,18 +132,12 @@ public class Test {
         }
         
         KeyboardController controller = new KeyboardController(frame, drone);
-        controller.setCommand(KeyEvent.VK_1, new LedCommand(LedAnimation.BlinkGreen,    5.0f, 3));
-        controller.setCommand(KeyEvent.VK_2, new LedCommand(LedAnimation.BlinkRed,      5.0f, 3));
-        controller.setCommand(KeyEvent.VK_3, new LedCommand(LedAnimation.BlinkOrange,   5.0f, 3));
-        controller.setCommand(KeyEvent.VK_4, new LedCommand(LedAnimation.SnakeGreenRed, 5.0f, 3));
-        controller.setCommand(KeyEvent.VK_0, new LedCommand(LedAnimation.Standard,      5.0f, 3));
-        controller.start();
+        controller.setCommand(KeyEvent.VK_1, new LedCommand(LedAnimation.BlinkGreen,    5.0f, 3.0f));
+        controller.setCommand(KeyEvent.VK_2, new LedCommand(LedAnimation.BlinkRed,      5.0f, 3.0f));
+        controller.setCommand(KeyEvent.VK_3, new LedCommand(LedAnimation.BlinkOrange,   5.0f, 3.0f));
+        controller.setCommand(KeyEvent.VK_4, new LedCommand(LedAnimation.SnakeGreenRed, 5.0f, 3.0f));
+        controller.setCommand(KeyEvent.VK_0, new LedCommand(LedAnimation.Standard,      5.0f, 3.0f));
     }
     
-    private static void test_controllers() throws Exception {
-        ARDrone2 drone = new ARDrone2();
-        JoystickController controller = new JoystickController(drone);
-        controller.start();
-    }
     
 }

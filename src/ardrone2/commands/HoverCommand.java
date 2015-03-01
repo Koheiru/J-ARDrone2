@@ -15,13 +15,13 @@
  */
 package ardrone2.commands;
 
-import ardrone2.DroneCommand;
+import ardrone2.Command;
 
 /**
  * Class HoverCommand
  * @author Prostov Yury
  */
-public class HoverCommand implements DroneCommand {
+public class HoverCommand implements Command {
     
     private static final String NAME = "AT*REF";
     private static final Object[] PARAMETERS = new Object[] { 0, 0.0f, 0.0f, 0.0f, 0.0f };

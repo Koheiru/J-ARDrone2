@@ -13,19 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package ardrone2;
 
 /**
- * Interface Drone
+ * Interface ARDroneLed
  * @author Prostov Yury
  */
-public interface Drone {
+public interface ARDroneLed {
     
-    public static interface Listener {
-    }
+    public void animateLed(int animationId, float frequency, float duration);
     
-    public void addListener(Listener listener);
-    
-    public void removeListener(Listener listener);
+    public void animateLed(LedAnimation animationId, float frequency, float duration);
     
 }

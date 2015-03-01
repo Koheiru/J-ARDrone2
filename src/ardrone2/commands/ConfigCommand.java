@@ -15,13 +15,13 @@
  */
 package ardrone2.commands;
 
-import ardrone2.DroneCommand;
+import ardrone2.Command;
 
 /**
  * Class ConfigCommand
  * @author Prostov Yury
  */
-public class ConfigCommand implements DroneCommand {
+public class ConfigCommand implements Command {
     
     private static final String NAME = "AT*CONFIG";
     private String m_param;
@@ -30,6 +30,11 @@ public class ConfigCommand implements DroneCommand {
     public ConfigCommand(String param, String value) {
         m_param = param;
         m_value = value;
+    }
+    
+    public ConfigCommand(String param, Object value) {
+        m_param = param;
+        m_value = value.toString();
     }
     
     @Override

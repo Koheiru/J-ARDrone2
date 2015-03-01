@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2015 Prostov Yury.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ardrone2;
+
+package ardrone2.impl.engine;
 
 /**
- * Interface DroneMessage
+ * Class CommandEncoder
  * @author Prostov Yury
  */
-public interface DroneMessage {
+public class CommandEncoder {
+
 }

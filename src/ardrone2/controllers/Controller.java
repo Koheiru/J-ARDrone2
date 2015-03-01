@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package ardrone2.controllers;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import ardrone2.ARDrone2;
+import ardrone2.Command;
 import ardrone2.ControlState;
-import ardrone2.DroneCommand;
+import ardrone2.commands.MoveCommand;
 
 /**
  * Class Controller
@@ -27,17 +29,18 @@ import ardrone2.DroneCommand;
 public abstract class Controller {
     
     private class Executor implements Runnable {
-        private static final long DREAM_DURATION = 50;
+        private static final long SLEEP_DURATION = 50;
         
         @Override
         public void run() {
             while (!m_isDone.get()) {
+                ControllerAxis axisCommand = currentAxis();
+                Command[] customCommands = currentCommands();
+                
                 ARDrone2 drone = drone();
-                if (drone != null) {
-                    handleCommands(drone);
-                    handleAxis(drone);
-                }
-                dream();
+                handleCommands(drone, axisCommand, customCommands);
+                
+                sleep();
             }
         }
         
@@ -47,38 +50,33 @@ public abstract class Controller {
             }
         }
         
-        private void handleCommands(ARDrone2 drone) {
-            DroneCommand[] commands = currentCommands();
-            if (commands == null) {
+        private void handleCommands(ARDrone2 drone, ControllerAxis axisCommand, Command[] customCommands) {
+            if (drone == null) {
                 return;
             }
             
-            for (DroneCommand command: commands) {
-                //System.out.print("Execute command: ");
-                //System.out.println(command.toString());
-                drone.execute(command);
+            boolean isFlying = (drone.controlState() == ControlState.Flying || 
+                                drone.controlState() == ControlState.Hovering);
+            if (axisCommand != null && isFlying) {
+                drone.move(axisCommand.roll, axisCommand.pitch, axisCommand.yaw, axisCommand.gaz);
+            }
+            
+            if (customCommands != null) {
+                for (Command command: customCommands) {
+                    //System.out.print("Execute command: ");
+                    //System.out.println(command.toString());
+                    drone.send(command);
+                }
             }
         }
         
-        private void handleAxis(ARDrone2 drone) {
-            if (drone.controlState() != ControlState.Flying &&
-                drone.controlState() != ControlState.Hovering) {
-                return;
+        private void sleep() {
+            try { 
+                Thread.sleep(SLEEP_DURATION); 
             }
-            
-            ControllerAxis axis = currentAxis();
-            if (axis == null) {
-                return;
+            catch (Exception exception) {
+                exception.printStackTrace(System.err);
             }
-            
-            System.out.print("Update axis: ");
-            System.out.println(currentAxis().toString());
-            drone.move(axis.roll, axis.pitch, axis.yaw, axis.gaz);
-        }
-        
-        private void dream() {
-            try { Thread.sleep(DREAM_DURATION); }
-            catch (Exception e) { /* log... */ }
         }
     }
     
@@ -88,18 +86,16 @@ public abstract class Controller {
     private Thread m_thread = new Thread(new Executor());
     private AtomicBoolean m_isDone = new AtomicBoolean(false);
     
-    public Controller() {
-        this(null);
+    public Controller() throws Exception {
+        startExecutor();
     }
     
-    public Controller(ARDrone2 drone) {
+    public Controller(ARDrone2 drone) throws Exception {
         m_drone = drone;
     }
     
     @Override
     protected void finalize() throws Throwable {
-        m_isDone.set(true);
-        m_thread.join();
         m_drone = null;
         super.finalize();
     }
@@ -116,15 +112,16 @@ public abstract class Controller {
         }
     }
     
-    //! TODO: call it in constructor and remove from api...
-    public boolean start() {
+    protected final void startExecutor() throws Exception {
+        //! TODO: need to call this method from child - it's ugly, so
+        // think about more nice solution without factory method pattern..
         m_isDone.set(false);
         m_thread.start();
-        return true;
     }
     
-    //! TODO: call it in destructor and remove from api...
-    public void stop() throws Exception {
+    protected final void stopExecutor() throws Exception {
+        //! TODO: need to call this method from child - it's ugly, so
+        // think about more nice solution without factory method pattern..
         m_isDone.set(true);
         m_thread.join();
     }
@@ -133,6 +130,6 @@ public abstract class Controller {
     
     protected abstract ControllerAxis currentAxis();
     
-    protected abstract DroneCommand[] currentCommands();
+    protected abstract Command[] currentCommands();
     
 }
