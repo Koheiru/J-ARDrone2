@@ -70,7 +70,7 @@ public class VisionDetectMessage implements Message {
                   .append(" dimension: ").append(objectDimensions[i]).append(";")
                   .append(" orientation: ").append(objectOrientations[i]).append(";")
                   .append(" translation: ").append(objectTranslations[i]).append(";")
-                  .append(" rotation: ").append(objectRotations[i]).append("]");
+                  .append(" rotation: ").append(objectRotations[i]).append("];");
         }
         
         return buffer.toString();

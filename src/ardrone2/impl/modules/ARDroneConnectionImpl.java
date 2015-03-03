@@ -51,8 +51,8 @@ public class ARDroneConnectionImpl extends ARDroneModule implements ARDroneConne
     
     @Override
     public void deinitialize() {
+        unsubscribeFromStates();
         super.deinitialize();
-        subscribeToStates();
     }
 
     @Override

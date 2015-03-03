@@ -246,4 +246,9 @@ public class ARDroneEngineImpl implements ARDroneEngine {
         m_cmdChannel.writeAndFlush(command);
     }
 
+    @Override
+    public void execute(Runnable task) {
+        m_eventLoop.execute(task);
+    }
+
 }

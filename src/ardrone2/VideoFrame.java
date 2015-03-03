@@ -16,40 +16,66 @@
 
 package ardrone2;
 
-import java.awt.image.BufferedImage;
-
 /**
  * Class VideoFrame
  * @author Prostov Yury
  */
-public class VideoFrame extends BufferedImage {
-
-    private int m_frameNumber = -1;
+public class VideoFrame {
+    
+    private int m_width    = -1;
+    private int m_height   = -1;
+    private int[][] m_data       = null;
+    private int[]   m_dataStride = null;
+    
+    private int m_streamId  = -1;
+    private int m_number    = -1;
     private int m_timestamp = -1;
     
-    public VideoFrame(int width, int height) {
-        super(width, height, BufferedImage.TYPE_INT_RGB);
+    
+    public VideoFrame() {
     }
     
-    public VideoFrame(int width, int height, int[] data) {
-        super(width, height, BufferedImage.TYPE_INT_RGB);
-        getRaster().setDataElements(0, 0, width, height, data);
+    public VideoFrame(int width, int height, int[][] data, int[] dataStride) {
+        m_width      = width;
+        m_height     = height;
+        m_data       = data;
+        m_dataStride = dataStride;
     }
     
-    public void setFrameNumber(int frameNumber) {
-        m_frameNumber = frameNumber;
-    }
-    
-    public int frameNumber() {
-        return m_frameNumber;
-    }
-    
-    public void setTimestamp(int timestamp) {
+    public VideoFrame(int width, int height, int[][] data, int[] dataStride, 
+                      int streamId, int number, int timestamp) {
+        this(width, height, data, dataStride);
+        m_streamId  = streamId;
+        m_number    = number;
         m_timestamp = timestamp;
+    }
+    
+    public int streamId() {
+        return m_streamId;
+    }
+    
+    public int number() {
+        return m_number;
     }
     
     public int timestamp() {
         return m_timestamp;
+    }
+    
+    public int width() {
+        return m_width;
+    }
+    
+    public int height() {
+        return m_height;
+    }
+    
+    public int[][] data() {
+        return m_data;
+    }
+    
+    public int[] dataStride() {
+        return m_dataStride;
     }
     
 }

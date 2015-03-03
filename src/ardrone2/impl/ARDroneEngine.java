@@ -76,4 +76,7 @@ public interface ARDroneEngine {
     
     public void send(Command command);
     
+    
+    public void execute(Runnable task);
+    
 }

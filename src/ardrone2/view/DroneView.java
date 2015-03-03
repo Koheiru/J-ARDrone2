@@ -19,6 +19,7 @@ package ardrone2.view;
 import ardrone2.ARDrone2;
 import ardrone2.ARDroneVideo;
 import ardrone2.VideoFrame;
+import ardrone2.video.Converter;
 import ardrone2.view.hud.ControlDrawer;
 import ardrone2.view.hud.StateDrawer;
 import java.awt.Color;
@@ -30,6 +31,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -44,8 +46,7 @@ public class DroneView extends JPanel {
     
     private class DroneListener implements ARDroneVideo.VideoListener {
         @Override
-        public void onVideoFrameReceived(VideoFrame videoFrame) {
-            DroneView.this.m_videoFrame = videoFrame;
+        public void onVideoFrameDecoded(VideoFrame videoFrame) {
             DroneView.this.revalidate();
             DroneView.this.repaint();
         }
@@ -53,8 +54,9 @@ public class DroneView extends JPanel {
     
     private ARDrone2 m_drone = null;
     private DroneListener m_listener = new DroneListener();
+    
     private Image m_canvas = null;
-    private VideoFrame m_videoFrame = null;
+    
     
     public DroneView() {
     }
@@ -106,17 +108,18 @@ public class DroneView extends JPanel {
     
     private void drawContent(Graphics2D painter, Dimension bounds) {
         ARDrone2 drone = m_drone;
-        if (drone == null || m_videoFrame == null) {
+        VideoFrame videoFrame = drone.videoFrame();
+        if (drone == null || videoFrame == null) {
             return;
         }
 
-        Dimension frameSize = new Dimension(m_videoFrame.getWidth(), m_videoFrame.getHeight());
+        Dimension frameSize = new Dimension(videoFrame.width(), videoFrame.height());
         Rectangle frameBounds = getScaledPosition(frameSize, bounds);
         Rectangle canvasBounds = new Rectangle(0, 0, bounds.width, bounds.height);
         
         //! Draw video.
-        drawFrame(painter, frameBounds, m_videoFrame);
-        drawTimestamp(painter, frameBounds, m_videoFrame);
+        drawFrame(painter, frameBounds, videoFrame);
+        drawTimestamp(painter, frameBounds, videoFrame);
         
         //! Draw hud.
         ControlDrawer.draw(painter, canvasBounds, drone);
@@ -124,8 +127,14 @@ public class DroneView extends JPanel {
     }
 
     private static void drawFrame(Graphics2D painter, Rectangle bounds, VideoFrame videoFrame) {
-        Image scaledFrame = videoFrame.getScaledInstance(bounds.width, bounds.height, Image.SCALE_SMOOTH);
-        painter.drawImage(scaledFrame, bounds.x, bounds.y, bounds.width, bounds.height, null);
+        try {
+            BufferedImage image = Converter.VideoFrameToImage(videoFrame);
+            Image scaledImage = image.getScaledInstance(bounds.width, bounds.height, Image.SCALE_SMOOTH);
+            painter.drawImage(scaledImage, bounds.x, bounds.y, bounds.width, bounds.height, null);
+        }
+        catch (Exception exception) {
+            exception.printStackTrace(System.err);
+        }
     }
 
     private static void drawTimestamp(Graphics2D painter, Rectangle bounds, VideoFrame videoFrame) {

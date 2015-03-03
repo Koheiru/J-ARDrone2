@@ -66,9 +66,9 @@ public class ARDroneControlImpl extends ARDroneModule implements ARDroneControl 
     
     @Override
     public void deinitialize() {
+        unsubscribeFromMessages();
+        unsubscribeFromStates();
         super.deinitialize();
-        subscribeToStates();
-        subscribeToMessages();
     }
 
     @Override

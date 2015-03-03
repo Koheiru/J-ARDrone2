@@ -23,7 +23,7 @@ package ardrone2;
 public interface ARDroneVideo {
     
     public static interface VideoListener {
-        public void onVideoFrameReceived(VideoFrame videoFrame);
+        public void onVideoFrameDecoded(VideoFrame videoFrame);
     }
     
     public void addVideoListener(VideoListener listener);

@@ -21,6 +21,7 @@ import ardrone2.ControlState;
 import ardrone2.LedAnimation;
 import ardrone2.commands.LedCommand;
 import ardrone2.controllers.KeyboardController;
+import ardrone2.view.DroneView;
 import java.awt.event.KeyEvent;
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
@@ -37,13 +38,13 @@ public class Test {
     
     public static void main(String [] args) throws Exception
     {
+        ARDrone2 drone = new ARDrone2();
+        
         frame = new JFrame("ARDrone 2");
         frame.setVisible(true);
         frame.setSize(400, 300);
+        frame.add(new DroneView(drone), BorderLayout.CENTER);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        
-        ARDrone2 drone = new ARDrone2();
-        //frame.add(new DroneView(drone), BorderLayout.CENTER);
         
         drone.addConnectionListener(new ARDrone2.ConnectionListener() {
             @Override

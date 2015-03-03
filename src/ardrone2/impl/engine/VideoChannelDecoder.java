@@ -17,7 +17,7 @@
 package ardrone2.impl.engine;
 
 import ardrone2.impl.DataDecoder;
-import ardrone2.messages.VideoMessage;
+import ardrone2.messages.VideoPacket;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class VideoChannelDecoder extends MessageToMessageDecoder<ByteBuf> {
     private static final int PaVE_STRUCT_SIZE = 64;
-    private VideoMessage m_message = null;
+    private VideoPacket m_message = null;
 
     @Override
     public void channelActive(ChannelHandlerContext context) throws Exception {
@@ -101,13 +101,13 @@ public class VideoChannelDecoder extends MessageToMessageDecoder<ByteBuf> {
         byte[] data = new byte[PaVE_STRUCT_SIZE];
         stream.readBytes(data);
         
-        m_message = new VideoMessage();
+        m_message = new VideoPacket();
         m_message.version              = DataDecoder.readByte (data, 4);
         m_message.videoCodec           = DataDecoder.readByte (data, 5);
         m_message.headerSize           = DataDecoder.readShort(data, 6);
         m_message.payloadSize          = DataDecoder.readInt  (data, 8);
-        m_message.encodedStreamWidth   = DataDecoder.readShort(data, 12);
-        m_message.encodedStreamHeight  = DataDecoder.readShort(data, 14);
+        m_message.encodedWidth         = DataDecoder.readShort(data, 12);
+        m_message.encodedHeight        = DataDecoder.readShort(data, 14);
         m_message.displayWidth         = DataDecoder.readShort(data, 16);
         m_message.displayHeight        = DataDecoder.readShort(data, 18);
         m_message.frameNumber          = DataDecoder.readInt  (data, 20);
@@ -115,7 +115,7 @@ public class VideoChannelDecoder extends MessageToMessageDecoder<ByteBuf> {
         m_message.chunksCount          = DataDecoder.readByte (data, 28);
         m_message.chunkIndex           = DataDecoder.readByte (data, 29);
         m_message.frameType            = DataDecoder.readByte (data, 30);
-        m_message.control              = DataDecoder.readByte (data, 31);
+        m_message.controlMark          = DataDecoder.readByte (data, 31);
         m_message.streamBytePositionLW = DataDecoder.readInt  (data, 32);
         m_message.streamBytePositionUW = DataDecoder.readInt  (data, 36);
         m_message.streamId             = DataDecoder.readShort(data, 40);

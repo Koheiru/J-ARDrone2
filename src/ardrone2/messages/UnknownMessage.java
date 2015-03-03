@@ -37,9 +37,9 @@ public class UnknownMessage implements Message {
     @Override
     public String toString() {
         StringBuilder buffer = new StringBuilder();
-        buffer.append("([UnknownMessage]")
+        buffer.append("[UnknownMessage]")
               .append(" tag: 0x").append(Integer.toHexString(tag)).append(";")
-              .append(" data: [blob] with size ").append(data.length).append(")");
+              .append(" data: [blob] with size ").append(data.length).append(";");
         return buffer.toString();
     }
     

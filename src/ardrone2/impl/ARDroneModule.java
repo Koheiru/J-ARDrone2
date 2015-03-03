@@ -78,6 +78,7 @@ public abstract class ARDroneModule {
     }
     
     public void deinitialize() {
+        m_engine = null;
     }
     
     protected ARDroneEngine engine() {
