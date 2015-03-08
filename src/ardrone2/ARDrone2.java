@@ -236,11 +236,6 @@ implements ARDroneConnection,
     }
 
     @Override
-    public boolean isBatteryTooHigh() {
-        return m_stateModule.isBatteryTooHigh();
-    }
-
-    @Override
     public void addVideoListener(VideoListener listener) {
         m_videoModule.addVideoListener(listener);
     }

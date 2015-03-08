@@ -40,7 +40,6 @@ public class ARDroneStateImpl extends ARDroneModule implements ARDroneState {
     
     private int m_battteryLevel = 0;
     private boolean m_batteryTooLow = false;
-    private boolean m_batteryTooHigh = false;
     
     public ARDroneStateImpl() {
         super(Channel.MessagesStream, DemoMessageDecoder.class, StateMessageDecoder.class);
@@ -80,11 +79,6 @@ public class ARDroneStateImpl extends ARDroneModule implements ARDroneState {
     public boolean isBatteryTooLow() {
         return m_batteryTooLow;
     }
-
-    @Override
-    public boolean isBatteryTooHigh() {
-        return m_batteryTooHigh;
-    }
     
     @Override
     protected void onStateChanged(ChannelState state) {
@@ -113,14 +107,11 @@ public class ARDroneStateImpl extends ARDroneModule implements ARDroneState {
     
     private boolean updateStateFlags(StateMessage stateMessage) {
         boolean batteryTooLow  = stateMessage.isFlagsEnabled(StateMessage.BATTERY_TOO_LOW_FLAG);
-        boolean batteryTooHigh  = stateMessage.isFlagsEnabled(StateMessage.BATTERY_TOO_HIGH_FLAG);
-        
-        if (m_batteryTooLow == batteryTooLow && m_batteryTooHigh == batteryTooHigh) {
+        if (m_batteryTooLow == batteryTooLow) {
             return false;
         }
         
         m_batteryTooLow = batteryTooLow;
-        m_batteryTooHigh = batteryTooHigh;
         return true;
     }
     
@@ -141,9 +132,7 @@ public class ARDroneStateImpl extends ARDroneModule implements ARDroneState {
         
         StateListener[] listeners = (StateListener[])m_listeners.listeners();
         for (StateListener listener: listeners) {
-            //! TODO: think about splitting of this code...
-            if (batteryFlagsChanged) { listener.onBatteryFlagsChanged(m_batteryTooLow, m_batteryTooHigh); }
-            if (batteryLevelChanged) { listener.onBatteryLevelChanged(m_battteryLevel); }
+            listener.onBatteryLevelChanged(m_battteryLevel, m_batteryTooLow);
         }
         
     }

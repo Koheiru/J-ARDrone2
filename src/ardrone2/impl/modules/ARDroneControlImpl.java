@@ -34,6 +34,7 @@ import ardrone2.impl.ListenersList;
 import ardrone2.impl.codecs.DemoMessageDecoder;
 import ardrone2.impl.codecs.StateMessageDecoder;
 import ardrone2.messages.DemoMessage;
+import ardrone2.messages.StateMessage;
 
 /**
  * Class ARDroneControlImpl
@@ -44,6 +45,7 @@ public class ARDroneControlImpl extends ARDroneModule implements ARDroneControl 
     private ListenersList m_listeners = null;
     
     private ControlState m_state = ControlState.Unknown;
+    private boolean m_isEmergencyMode = false;
     private float m_altitude  = 0.0f;
     private float m_pitch     = 0.0f;
     private float m_roll      = 0.0f;
@@ -166,16 +168,38 @@ public class ARDroneControlImpl extends ARDroneModule implements ARDroneControl 
     
     @Override
     protected void onMessageReceived(Message message) {
-        boolean isValidMessage = (message instanceof DemoMessage);
-        if (!isValidMessage) {
-            return;
+        if (message instanceof StateMessage) {
+            StateMessage stateMessage = (StateMessage)message;
+            boolean stateChanged = updateEmergencyState(stateMessage);
+            notifyListeners(stateChanged, false, false);
         }
         
-        DemoMessage demoMessage = (DemoMessage)message;
-        boolean stateChanged = updateControlState(demoMessage.state);
-        boolean directionChanged = updateDirection(demoMessage.altitude, demoMessage.pitch, demoMessage.roll, demoMessage.yaw);
-        boolean velocityChanged = updateVelocity(demoMessage.xVelocity, demoMessage.yVelocity, demoMessage.zVelocity);
-        notifyListeners(stateChanged, directionChanged, velocityChanged);
+        if (message instanceof DemoMessage) {
+            DemoMessage demoMessage = (DemoMessage)message;
+            boolean stateChanged = updateControlState(demoMessage.state);
+            boolean directionChanged = updateDirection(demoMessage.altitude, demoMessage.pitch, demoMessage.roll, demoMessage.yaw);
+            boolean velocityChanged = updateVelocity(demoMessage.xVelocity, demoMessage.yVelocity, demoMessage.zVelocity);
+            notifyListeners(stateChanged, directionChanged, velocityChanged);
+        }
+    }
+    
+    private boolean updateEmergencyState(StateMessage stateMessage) {
+        boolean isEmergencyMode = stateMessage.isFlagsEnabled(StateMessage.EMERGENCY_FLAG) || 
+                (stateMessage.isFlagsEnabled(StateMessage.USER_EMERGENCY_FLAG) && 
+                 stateMessage.isFlagsDisabled(StateMessage.TIMER_ELAPSED_FLAG));
+        if (m_isEmergencyMode == isEmergencyMode) {
+            return false;
+        }
+        
+        m_isEmergencyMode = isEmergencyMode;
+        if (m_isEmergencyMode) {
+            m_state = ControlState.Emergency;
+            return true;
+        }
+        
+        //! If emergency mode was unset then save current state until
+        // receive DemoMessage with real state.
+        return false;
     }
     
     private boolean updateControlState(int state) {
@@ -191,6 +215,10 @@ public class ARDroneControlImpl extends ARDroneModule implements ARDroneControl 
     
     private ControlState convertToControlState(int majorState, int minorState)
     {
+        if (m_isEmergencyMode) {
+            return ControlState.Emergency;
+        }
+        
         switch (majorState) {
             case DemoMessage.MAJOR_STATE_LANDED:        return ControlState.Landed;
             case DemoMessage.MAJOR_STATE_TRANS_TAKEOFF: return ControlState.TakingOff;

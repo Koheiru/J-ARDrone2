@@ -82,6 +82,9 @@ public class Test {
                 else if (state == ControlState.TakingOff) {
                     System.out.println("Drone state: TakingOff");
                 }
+                else if (state == ControlState.Emergency) {
+                    System.out.println("Drone state: Emergency");
+                }
                 else if (state == ControlState.Unknown) {
                     System.out.println("Drone state: Unknown");
                 }
@@ -113,16 +116,13 @@ public class Test {
         
         drone.addStateListener(new ARDrone2.StateListener() {
             @Override
-            public void onBatteryLevelChanged(int batteryLevel) {
+            public void onBatteryLevelChanged(int batteryLevel, boolean isTooLow) {
                 System.out.print("Drone battery level: ");
-                System.out.println(batteryLevel);
-            }
-            @Override
-            public void onBatteryFlagsChanged(boolean isTooLow, boolean isTooHigh) {
-                System.out.print("Drone battery is too low: ");
-                System.out.println(isTooLow);
-                System.out.print("Drone battery is too high: ");
-                System.out.println(isTooHigh);
+                System.out.print(batteryLevel);
+                if (isTooLow) {
+                    System.out.print(" [warning]");
+                }
+                System.out.println();
             }
         });
         

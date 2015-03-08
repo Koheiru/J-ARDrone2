@@ -23,8 +23,7 @@ package ardrone2;
 public interface ARDroneState {
     
     public static interface StateListener {
-        public void onBatteryLevelChanged(int level);
-        public void onBatteryFlagsChanged(boolean isTooLow, boolean isTooHigh);
+        public void onBatteryLevelChanged(int level, boolean isTooLow);
     }
     
     public void addStateListener(StateListener listener);
@@ -35,7 +34,5 @@ public interface ARDroneState {
     public int batteryLevel();
     
     public boolean isBatteryTooLow();
-    
-    public boolean isBatteryTooHigh();
     
 }
